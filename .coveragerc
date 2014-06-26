@@ -1,0 +1,7 @@
+[run]
+branch = True
+source = congressclient
+omit = congressclient/tests/*,congressclient/openstack/*
+
+[report]
+ignore-errors = True
