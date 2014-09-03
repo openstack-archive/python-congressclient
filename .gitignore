@@ -1,3 +1,6 @@
+# Congress build/runtime artifacts
+subunit.log
+
 *.py[cod]
 
 # C extensions
@@ -15,8 +18,8 @@ var
 sdist
 develop-eggs
 .installed.cfg
-lib
-lib64
+/lib
+/lib64
 
 # Installer logs
 pip-log.txt
@@ -49,3 +52,5 @@ ChangeLog
 # Editors
 *~
 .*.swp
+*.swo
+*.swn
