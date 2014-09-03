@@ -1,4 +1,4 @@
-hacking>=0.5.6,<0.8
+hacking>=0.9.2,<0.10
 
 coverage>=3.6
 discover
@@ -9,3 +9,5 @@ oslosphinx>=2.2.0.0a2
 testrepository>=0.0.18
 testscenarios>=0.4
 testtools>=0.9.34
+mock>=1.0
+WebOb>=1.2.3
