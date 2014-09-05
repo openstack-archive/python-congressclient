@@ -16,11 +16,11 @@ from keystoneclient import adapter
 
 
 class Client(object):
-    policy_rules_path = '/policies/%s/rules'
-    policy_rules_paths = '/policies/%s/rules/%s'
-    policy_rows = '/policies/%s/tables/%s/rows'
-    policy_rules = '/policies/%s/rules'
-    policies = '/policies'
+    policy_rules_path = '/v1/policies/%s/rules'
+    policy_rules_paths = '/v1/policies/%s/rules/%s'
+    policy_rows = '/v1/policies/%s/tables/%s/rows'
+    policy_rules = '/v1/policies/%s/rules'
+    policies = '/v1/policies'
 
     def __init__(self, **kwargs):
         super(Client, self).__init__()
