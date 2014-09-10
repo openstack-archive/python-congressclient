@@ -15,6 +15,7 @@
 """Policy action implemenations"""
 
 import logging
+import sys
 
 from cliff import command
 from cliff import lister
@@ -111,6 +112,31 @@ class ListPolicyRules(lister.Lister):
                  for s in data))
 
 
+class ListPolicyTables(lister.Lister):
+    """List policy tables."""
+
+    log = logging.getLogger(__name__ + '.ListPolicyTables')
+
+    def get_parser(self, prog_name):
+        parser = super(ListPolicyTables, self).get_parser(prog_name)
+        parser.add_argument(
+            'policy_name',
+            metavar="<policy-name>",
+            help="Name of the policy")
+        return parser
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)' % parsed_args)
+        client = self.app.client_manager.congressclient
+        data = client.list_policy_tables(parsed_args.policy_name)['results']
+        columns = ['id']
+        formatters = {'PolicyTables': utils.format_list}
+        return (columns,
+                (utils.get_dict_properties(s, columns,
+                                           formatters=formatters)
+                 for s in data))
+
+
 class ListPolicy(lister.Lister):
     """List Policy."""
 
@@ -131,13 +157,13 @@ class ListPolicy(lister.Lister):
                  for s in data))
 
 
-class GetPolicyRow(lister.Lister):
-    """Get policy row."""
+class ListPolicyRows(lister.Lister):
+    """List policy rows."""
 
-    log = logging.getLogger(__name__ + '.GetPolicyRow')
+    log = logging.getLogger(__name__ + '.ListPolicyRows')
 
     def get_parser(self, prog_name):
-        parser = super(GetPolicyRow, self).get_parser(prog_name)
+        parser = super(ListPolicyRows, self).get_parser(prog_name)
         parser.add_argument(
             'policy_name',
             metavar="<policy-name>",
@@ -145,18 +171,26 @@ class GetPolicyRow(lister.Lister):
         parser.add_argument(
             'table',
             metavar="<table>",
-            help="Table to get the policy row from")
+            help="Table to get the policy rows from")
+        parser.add_argument(
+            '--trace',
+            action='store_true',
+            default=False,
+            help="Display explanation of result")
         return parser
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         client = self.app.client_manager.congressclient
-        data = client.get_policy_rows(parsed_args.policy_name,
-                                      parsed_args.table)['results']
+        data = client.list_policy_rows(parsed_args.policy_name,
+                                       parsed_args.table,
+                                       parsed_args.trace)
 
+        if 'trace' in data:
+            sys.stdout.write(data['trace'] + '\n')
         columns = ['data']
         formatters = {'Policies': utils.format_list}
         return (columns,
                 (utils.get_dict_properties(s, columns,
                                            formatters=formatters)
-                 for s in data))
+                 for s in data['results']))

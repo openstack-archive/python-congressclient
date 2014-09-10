@@ -100,7 +100,7 @@ class TestListPolicyRules(common.TestCongressBase):
         self.assertEqual(['id', 'comment', 'rule'], result[0])
 
 
-class ListPolicy(common.TestCongressBase):
+class TestListPolicy(common.TestCongressBase):
     def test_list_policy_rules(self):
         policy_name = 'classification'
         arglist = [
@@ -122,7 +122,31 @@ class ListPolicy(common.TestCongressBase):
         self.assertEqual(['id', 'owner_id'], result[0])
 
 
-class GetPolicyRow(common.TestCongressBase):
+class TestListPolicyTables(common.TestCongressBase):
+    def test_list_policy_tables(self):
+        policy_name = 'classification'
+        arglist = [
+            policy_name
+        ]
+        verifylist = [
+            ('policy_name', policy_name)
+        ]
+        response = {
+            "results": [{"id": "ports"},
+                        {"id": "virtual_machines"}]
+        }
+        lister = mock.Mock(return_value=response)
+        self.app.client_manager.congressclient.list_policy_tables = lister
+        cmd = policy.ListPolicyTables(self.app, self.namespace)
+
+        parsed_args = self.check_parser(cmd, arglist, verifylist)
+        result = cmd.take_action(parsed_args)
+
+        lister.assert_called_with(policy_name)
+        self.assertEqual(['id'], result[0])
+
+
+class TestListPolicyRows(common.TestCongressBase):
 
     def test_list_policy_rules(self):
         policy_name = 'classification'
@@ -131,17 +155,46 @@ class GetPolicyRow(common.TestCongressBase):
             policy_name, table_name
         ]
         verifylist = [
+            ('policy_name', policy_name),
+            ('table', table_name)
         ]
         response = {"results":
                     [{"data": ["69abc88b-c950-4625-801b-542e84381509",
                                "default"]}]}
 
         lister = mock.Mock(return_value=response)
-        self.app.client_manager.congressclient.get_policy_rows = lister
-        cmd = policy.GetPolicyRow(self.app, self.namespace)
+        self.app.client_manager.congressclient.list_policy_rows = lister
+        cmd = policy.ListPolicyRows(self.app, self.namespace)
 
         parsed_args = self.check_parser(cmd, arglist, verifylist)
         result = cmd.take_action(parsed_args)
 
-        lister.assert_called_with(policy_name, table_name)
+        lister.assert_called_with(policy_name, table_name, False)
+        self.assertEqual(['data'], result[0])
+
+    def test_list_policy_rules_trace(self):
+        policy_name = 'classification'
+        table_name = 'p'
+        arglist = [
+            policy_name, table_name, "--trace"
+        ]
+        verifylist = [
+            ('policy_name', policy_name),
+            ('table', table_name)
+        ]
+        response = {"results":
+                    [{"data": ["69abc88b-c950-4625-801b-542e84381509",
+                               "default"]}],
+                    "trace": "Call p(x, y)\n "
+                             "Exit p('69abc88b-c950-4625-801b-542e84381509', "
+                             "'default')\n"}
+
+        lister = mock.Mock(return_value=response)
+        self.app.client_manager.congressclient.list_policy_rows = lister
+        cmd = policy.ListPolicyRows(self.app, self.namespace)
+
+        parsed_args = self.check_parser(cmd, arglist, verifylist)
+        result = cmd.take_action(parsed_args)
+
+        lister.assert_called_with(policy_name, table_name, True)
         self.assertEqual(['data'], result[0])
