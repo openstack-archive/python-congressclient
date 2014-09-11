@@ -46,8 +46,7 @@ class TestCreatePolicyRule(common.TestCongressBase):
         parsed_args = self.check_parser(cmd, arglist, verifylist)
         result = list(cmd.take_action(parsed_args))
         filtered = [('comment', 'id', 'rule'),
-                    ('None', 'e531f2b3-3d97-42c0-b3b5-b7b6ab532018',
-                     policy._format_rule(rule))]
+                    ('None', 'e531f2b3-3d97-42c0-b3b5-b7b6ab532018', rule)]
         self.assertEqual(filtered, result)
 
 
@@ -94,10 +93,9 @@ class TestListPolicyRules(common.TestCongressBase):
         cmd = policy.ListPolicyRules(self.app, self.namespace)
 
         parsed_args = self.check_parser(cmd, arglist, verifylist)
-        result = cmd.take_action(parsed_args)
+        cmd.take_action(parsed_args)
 
         lister.assert_called_with(policy_name)
-        self.assertEqual(['id', 'comment', 'rule'], result[0])
 
 
 class TestListPolicy(common.TestCongressBase):
@@ -167,10 +165,9 @@ class TestListPolicyRows(common.TestCongressBase):
         cmd = policy.ListPolicyRows(self.app, self.namespace)
 
         parsed_args = self.check_parser(cmd, arglist, verifylist)
-        result = cmd.take_action(parsed_args)
+        cmd.take_action(parsed_args)
 
         lister.assert_called_with(policy_name, table_name, False)
-        self.assertEqual(['Col0', 'Col1'], result[0])
 
     def test_list_policy_rules_trace(self):
         policy_name = 'classification'
@@ -194,7 +191,6 @@ class TestListPolicyRows(common.TestCongressBase):
         cmd = policy.ListPolicyRows(self.app, self.namespace)
 
         parsed_args = self.check_parser(cmd, arglist, verifylist)
-        result = cmd.take_action(parsed_args)
+        cmd.take_action(parsed_args)
 
         lister.assert_called_with(policy_name, table_name, True)
-        self.assertEqual(['Col0', 'Col1'], result[0])

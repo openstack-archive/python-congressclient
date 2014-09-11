@@ -59,7 +59,6 @@ class CreatePolicyRule(show.ShowOne):
         client = self.app.client_manager.congressclient
         body = {'rule': parsed_args.rule}
         data = client.create_policy_rule(parsed_args.policy_name, body)
-        data['rule'] = _format_rule(data['rule'])
         return zip(*sorted(six.iteritems(data)))
 
 
@@ -87,7 +86,7 @@ class DeletePolicyRule(command.Command):
                                   parsed_args.rule_id)
 
 
-class ListPolicyRules(lister.Lister):
+class ListPolicyRules(command.Command):
     """List policy rules."""
 
     log = logging.getLogger(__name__ + '.ListPolicyRules')
@@ -103,13 +102,14 @@ class ListPolicyRules(lister.Lister):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         client = self.app.client_manager.congressclient
-        data = client.list_policy_rules(parsed_args.policy_name)['results']
-        columns = ['id', 'comment', 'rule']
-        formatters = {'PolicyRules': utils.format_list}
-        return (columns,
-                (utils.get_dict_properties(s, columns,
-                                           formatters=formatters)
-                 for s in data))
+        results = client.list_policy_rules(parsed_args.policy_name)['results']
+        for result in results:
+            print("// ID: %s" % str(result['id']))
+            if result['comment'] != "None":
+                print("// %s" % str(result['comment']))
+            print(result['rule'])
+            print('')
+        return 0
 
 
 class ListPolicyTables(lister.Lister):
