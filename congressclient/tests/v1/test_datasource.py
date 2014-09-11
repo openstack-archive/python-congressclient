@@ -92,4 +92,4 @@ class TestListDatasourceRows(common.TestCongressBase):
         result = cmd.take_action(parsed_args)
 
         lister.assert_called_with(datasource_name, table_name)
-        self.assertEqual(['data'], result[0])
+        self.assertEqual(['Col0', 'Col1'], result[0])

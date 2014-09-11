@@ -170,7 +170,7 @@ class TestListPolicyRows(common.TestCongressBase):
         result = cmd.take_action(parsed_args)
 
         lister.assert_called_with(policy_name, table_name, False)
-        self.assertEqual(['data'], result[0])
+        self.assertEqual(['Col0', 'Col1'], result[0])
 
     def test_list_policy_rules_trace(self):
         policy_name = 'classification'
@@ -197,4 +197,4 @@ class TestListPolicyRows(common.TestCongressBase):
         result = cmd.take_action(parsed_args)
 
         lister.assert_called_with(policy_name, table_name, True)
-        self.assertEqual(['data'], result[0])
+        self.assertEqual(['Col0', 'Col1'], result[0])

@@ -182,15 +182,16 @@ class ListPolicyRows(lister.Lister):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         client = self.app.client_manager.congressclient
-        data = client.list_policy_rows(parsed_args.policy_name,
-                                       parsed_args.table,
-                                       parsed_args.trace)
+        answer = client.list_policy_rows(parsed_args.policy_name,
+                                         parsed_args.table,
+                                         parsed_args.trace)
 
-        if 'trace' in data:
-            sys.stdout.write(data['trace'] + '\n')
-        columns = ['data']
-        formatters = {'Policies': utils.format_list}
-        return (columns,
-                (utils.get_dict_properties(s, columns,
-                                           formatters=formatters)
-                 for s in data['results']))
+        if 'trace' in answer:
+            sys.stdout.write(answer['trace'] + '\n')
+        results = answer['results']
+        columns = []
+        if results:
+            columns = ['Col%s' % (i)
+                       for i in xrange(0, len(results[0]['data']))]
+        self.log.debug("Columns: " + str(columns))
+        return (columns, (x['data'] for x in results))

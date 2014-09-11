@@ -87,12 +87,12 @@ class ListDatasourceRows(lister.Lister):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         client = self.app.client_manager.congressclient
-        data = client.list_datasource_rows(parsed_args.datasource_name,
-                                           parsed_args.table)['results']
+        results = client.list_datasource_rows(parsed_args.datasource_name,
+                                              parsed_args.table)['results']
 
-        columns = ['data']
-        formatters = {'Policies': utils.format_list}
-        return (columns,
-                (utils.get_dict_properties(s, columns,
-                                           formatters=formatters)
-                 for s in data))
+        if results:
+            columns = ['Col%s' % (i)
+                       for i in xrange(0, len(results[0]['data']))]
+        else:
+            columns = ['data']
+        return (columns, (x['data'] for x in results))
