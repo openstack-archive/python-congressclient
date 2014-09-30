@@ -16,6 +16,24 @@ from keystoneclient import adapter
 
 
 class Client(object):
+    """Client for the Congress v1 API.
+
+    Example::
+        import keystoneclient
+        from congressclient.v1 import client
+        auth = keystoneclient.auth.identity.v2.Password(
+            auth_url=AUTH_URL, username=USERNAME,
+            password=PASSWORD, tenant_name=TENANT_NAME)
+        session = keystoneclient.session.Session(auth=auth)
+        congress = client.Client(session=session,
+                                 auth=None,
+                                 interface='publicURL',
+                                 service_type='policy',
+                                 region_name='RegionOne')
+        congress.create_policy_rule(..)
+
+    """
+
     policy_rules = '/v1/policies/%s/rules'
     policy_rules_path = '/v1/policies/%s/rules/%s'
     policy_tables = '/v1/policies/%s/tables'
