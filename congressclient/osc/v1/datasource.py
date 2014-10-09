@@ -92,7 +92,7 @@ class ListDatasourceRows(lister.Lister):
 
         if results:
             columns = ['Col%s' % (i)
-                       for i in xrange(0, len(results[0]['data']))]
+                       for i in range(0, len(results[0]['data']))]
         else:
             columns = ['data']
         return (columns, (x['data'] for x in results))
