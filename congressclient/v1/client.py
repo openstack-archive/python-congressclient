@@ -64,6 +64,11 @@ class Client(object):
             self.policy_rules_path % (policy_name, rule_id))
         return body
 
+    def show_policy_rule(self, policy_name, rule_id):
+        resp, body = self.httpclient.get(
+            self.policy_rules_path % (policy_name, rule_id))
+        return body
+
     def list_policy_rows(self, policy_name, table, trace=None):
         if trace:
             query = self.policy_rows_trace

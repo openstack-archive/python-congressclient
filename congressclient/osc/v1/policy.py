@@ -252,3 +252,29 @@ class ListPolicyRows(lister.Lister):
                        for i in xrange(0, len(results[0]['data']))]
         self.log.debug("Columns: " + str(columns))
         return (columns, (x['data'] for x in results))
+
+
+class ShowPolicyRule(show.ShowOne):
+    """Show a policy rule."""
+
+    log = logging.getLogger(__name__ + '.ShowPolicyRule')
+
+    def get_parser(self, prog_name):
+        parser = super(ShowPolicyRule, self).get_parser(prog_name)
+        parser.add_argument(
+            'policy_name',
+            metavar="<policy-name>",
+            help="Name or identifier of the policy")
+        parser.add_argument(
+            'id',
+            metavar="<rule>",
+            help="Policy rule id")
+
+        return parser
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)' % parsed_args)
+        client = self.app.client_manager.congressclient
+        data = client.show_policy_rule(parsed_args.policy_name,
+                                       parsed_args.id)
+        return zip(*sorted(six.iteritems(data)))

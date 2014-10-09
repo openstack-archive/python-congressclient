@@ -289,3 +289,29 @@ class TestSimulatePolicy(common.TestCongressBase):
         args['query'] = query
         args['trace'] = True
         lister.assert_called_with(policy_name, 'simulate', args)
+
+
+class TestGet(common.TestCongressBase):
+
+    def test_create_policy_rule(self):
+        policy_name = 'classification'
+        rule = "p(x) :- q(x)"
+        id = "e531f2b3-3d97-42c0-b3b5-b7b6ab532018"
+        response = {"comment": "None",
+                    "id": id,
+                    "rule": rule}
+
+        arglist = [policy_name, id]
+        verifylist = [
+            ('policy_name', policy_name),
+            ('id', id),
+        ]
+
+        mocker = mock.Mock(return_value=response)
+        self.app.client_manager.congressclient.show_policy_rule = mocker
+        cmd = policy.ShowPolicyRule(self.app, self.namespace)
+        parsed_args = self.check_parser(cmd, arglist, verifylist)
+        result = list(cmd.take_action(parsed_args))
+        filtered = [('comment', 'id', 'rule'),
+                    ('None', id, rule)]
+        self.assertEqual(filtered, result)
