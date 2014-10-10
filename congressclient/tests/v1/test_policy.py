@@ -194,3 +194,98 @@ class TestListPolicyRows(common.TestCongressBase):
         cmd.take_action(parsed_args)
 
         lister.assert_called_with(policy_name, table_name, True)
+
+
+class TestSimulatePolicy(common.TestCongressBase):
+
+    def test_simulate_policy(self):
+        policy_name = 'classification'
+        action_name = 'action'
+        sequence = 'q(1)'
+        query = 'error(x)'
+        arglist = [
+            policy_name, query, sequence, action_name
+        ]
+        verifylist = [
+            ('policy', policy_name),
+            ('action_policy', action_name),
+            ('sequence', sequence),
+            ('query', query),
+            ('delta', False)
+        ]
+        response = {'result': ['error(1)', 'error(2)']}
+
+        lister = mock.Mock(return_value=response)
+        self.app.client_manager.congressclient.execute_policy_action = lister
+        cmd = policy.SimulatePolicy(self.app, self.namespace)
+
+        parsed_args = self.check_parser(cmd, arglist, verifylist)
+        cmd.take_action(parsed_args)
+
+        args = {}
+        args['action_policy'] = action_name
+        args['sequence'] = sequence
+        args['query'] = query
+        lister.assert_called_with(policy_name, 'simulate', args)
+
+    def test_simulate_policy_delta(self):
+        policy_name = 'classification'
+        action_name = 'action'
+        sequence = 'q(1)'
+        query = 'error(x)'
+        arglist = [
+            policy_name, query, sequence, action_name, "--delta"
+        ]
+        verifylist = [
+            ('policy', policy_name),
+            ('action_policy', action_name),
+            ('sequence', sequence),
+            ('query', query),
+            ('delta', True)
+        ]
+        response = {'result': ['error(1)', 'error(2)']}
+
+        lister = mock.Mock(return_value=response)
+        self.app.client_manager.congressclient.execute_policy_action = lister
+        cmd = policy.SimulatePolicy(self.app, self.namespace)
+
+        parsed_args = self.check_parser(cmd, arglist, verifylist)
+        cmd.take_action(parsed_args)
+
+        args = {}
+        args['action_policy'] = action_name
+        args['sequence'] = sequence
+        args['query'] = query
+        args['delta'] = True
+        lister.assert_called_with(policy_name, 'simulate', args)
+
+    def test_simulate_policy_trace(self):
+        policy_name = 'classification'
+        action_name = 'action'
+        sequence = 'q(1)'
+        query = 'error(x)'
+        arglist = [
+            policy_name, query, sequence, action_name, "--trace"
+        ]
+        verifylist = [
+            ('policy', policy_name),
+            ('action_policy', action_name),
+            ('sequence', sequence),
+            ('query', query),
+            ('trace', True)
+        ]
+        response = {'result': ['error(1)', 'error(2)'], 'trace': 'Call'}
+
+        lister = mock.Mock(return_value=response)
+        self.app.client_manager.congressclient.execute_policy_action = lister
+        cmd = policy.SimulatePolicy(self.app, self.namespace)
+
+        parsed_args = self.check_parser(cmd, arglist, verifylist)
+        cmd.take_action(parsed_args)
+
+        args = {}
+        args['action_policy'] = action_name
+        args['sequence'] = sequence
+        args['query'] = query
+        args['trace'] = True
+        lister.assert_called_with(policy_name, 'simulate', args)

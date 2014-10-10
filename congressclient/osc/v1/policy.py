@@ -112,6 +112,63 @@ class ListPolicyRules(command.Command):
         return 0
 
 
+class SimulatePolicy(command.Command):
+    """Show the result of simulation."""
+
+    log = logging.getLogger(__name__ + '.SimulatePolicy')
+
+    def get_parser(self, prog_name):
+        parser = super(SimulatePolicy, self).get_parser(prog_name)
+        parser.add_argument(
+            'policy',
+            metavar="<policy>",
+            help="Name of the policy")
+        parser.add_argument(
+            'query',
+            metavar="<query>",
+            help="String representing query (policy rule or literal)")
+        parser.add_argument(
+            'sequence',
+            metavar="<sequence>",
+            help="String representing sequence of updates/actions")
+        parser.add_argument(
+            'action_policy',
+            metavar="<action_policy>",
+            help="Name of the policy with actions",
+            default=None)
+        parser.add_argument(
+            '--delta',
+            action='store_true',
+            default=False,
+            help="Return difference in query caused by update sequence")
+        parser.add_argument(
+            '--trace',
+            action='store_true',
+            default=False,
+            help="Include trace describing computation")
+        return parser
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)' % parsed_args)
+        client = self.app.client_manager.congressclient
+        args = {}
+        args['query'] = parsed_args.query
+        args['sequence'] = parsed_args.sequence
+        if parsed_args.action_policy is not None:
+            args['action_policy'] = parsed_args.action_policy
+        if parsed_args.delta:
+            args['delta'] = parsed_args.delta
+        if parsed_args.trace:
+            args['trace'] = parsed_args.trace
+        results = client.execute_policy_action(
+            parsed_args.policy, 'simulate', args)
+        for result in results['result']:
+            print(result)
+        if 'trace' in results:
+            print (results['trace'])
+        return 0
+
+
 class ListPolicyTables(lister.Lister):
     """List policy tables."""
 

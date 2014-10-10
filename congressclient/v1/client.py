@@ -12,6 +12,8 @@
 #   License for the specific language governing permissions and limitations
 #   under the License.
 
+import urllib
+
 from keystoneclient import adapter
 
 
@@ -41,6 +43,7 @@ class Client(object):
     policy_rows_trace = '/v1/policies/%s/tables/%s/rows?trace=True'
     policy_rules = '/v1/policies/%s/rules'
     policies = '/v1/policies'
+    policy_action = '/v1/policies/%s?%s'
     datasources = '/v1/data-sources'
     datasource_tables = '/v1/data-sources/%s/tables'
     datasource_rows = '/v1/data-sources/%s/tables/%s/rows'
@@ -79,6 +82,14 @@ class Client(object):
 
     def list_policy_tables(self, policy_name):
         resp, body = self.httpclient.get(self.policy_tables % (policy_name))
+        return body
+
+    def execute_policy_action(self, policy_name, action, args):
+        newargs = dict(args)  # make a copy; then add action=<action>
+        newargs['action'] = action
+        actionurl = urllib.urlencode(newargs)
+        resp, body = self.httpclient.post(
+            self.policy_action % (policy_name, actionurl))
         return body
 
     def list_datasources(self):
