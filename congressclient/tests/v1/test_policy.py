@@ -21,15 +21,7 @@ class TestCreatePolicyRule(common.TestCongressBase):
 
     def test_create_policy_rule(self):
         policy_name = 'classification'
-        rule = ("port_security_group(port, security_group_name) :-"
-                "neutron:ports(addr_pairs, security_groups, extra_dhcp_opts,"
-                "binding_cap, status, name, admin_state_up, network_id, "
-                "tenant_id, binding_vif, device_owner, mac_address, "
-                "fixed_ips, port, device_id, binding_host_id1), "
-                "neutron:ports.security_groups(security_groups, "
-                "security_group_id), neutron:security_groups(tenant_id2, "
-                "security_group_name, desc2, security_group_id)")
-
+        rule = "p(x) :- q(x)"
         response = {"comment": "None",
                     "id": "e531f2b3-3d97-42c0-b3b5-b7b6ab532018",
                     "rule": rule}
