@@ -1,0 +1,8 @@
+Verified+2: Jenkins
+Workflow+1: Aaron Rosen <aaronorosen@gmail.com>
+Code-Review+2: Peter Balland <peter@balland.net>
+Submitted-by: Jenkins
+Submitted-at: Wed, 15 Oct 2014 19:48:42 +0000
+Reviewed-on: https://review.openstack.org/127324
+Project: stackforge/python-congressclient
+Branch: refs/heads/master
