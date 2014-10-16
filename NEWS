@@ -1,0 +1,25 @@
+1.0.1 - XXXX-XX-XX
+------------------
+    - Add missing CLI command
+        - openstack congress policy rule show
+    - python34 compatibility
+    - New CLI command to simulate results of rule
+        - openstack congress policy simulate  Show the result of simulation.
+
+
+1.0.0 - 2014-09-29
+------------------
+    - First release
+    - python-openstackclient integration
+        - CLI
+        - keystone catalog and auth
+    - Support for the following CLI commands:
+        - openstack congress datasource list  List Datasources.
+        - openstack congress datasource row list  List datasource rows.
+        - openstack congress datasource table list  List datasource tables.
+        - openstack congress policy list  List Policy.
+        - openstack congress policy row list  List policy rows.
+        - openstack congress policy rule create  Create a policy rule.
+        - openstack congress policy rule delete  Delete a policy rule.
+        - openstack congress policy rule list  List policy rules.
+        - openstack congress policy table list  List policy tables.
