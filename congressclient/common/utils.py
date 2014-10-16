@@ -60,6 +60,17 @@ def import_class(import_str):
     return getattr(sys.modules[mod_str], class_str)
 
 
+def format_long_dict_list(data):
+    """Return a formatted string.
+
+    :param data: a list of dicts
+    :rtype: a string formatted to {a:b, c:d}, {e:f, g:h}
+    """
+    newdata = [str({str(key): str(value) for key, value in d.iteritems()})
+               for d in data]
+    return ',\n'.join(newdata) + '\n'
+
+
 def format_list(data):
     """Return a formatted strings
 
@@ -80,7 +91,6 @@ def get_dict_properties(item, fields, mixed_case_fields=[], formatters={}):
        to format the values
     """
     row = []
-
     for field in fields:
         if field in mixed_case_fields:
             field_name = field.replace(' ', '_')

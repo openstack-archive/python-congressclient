@@ -93,6 +93,64 @@ class ListDatasourceStatus(lister.Lister):
                  for s in data))
 
 
+class ShowDatasourceSchema(lister.Lister):
+    """Show schema for datasource."""
+
+    log = logging.getLogger(__name__ + '.ShowDatasourceSchema')
+
+    def get_parser(self, prog_name):
+        parser = super(ShowDatasourceSchema, self).get_parser(prog_name)
+        parser.add_argument(
+            'datasource_name',
+            metavar="<datasource-name>",
+            help="Name of the datasource")
+        return parser
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)' % parsed_args)
+        client = self.app.client_manager.congressclient
+        data = client.show_datasource_schema(
+            parsed_args.datasource_name)
+        formatters = {'columns': utils.format_long_dict_list}
+        newdata = [{'table': x['table_id'],
+                    'columns': x['columns']}
+                   for x in data['tables']]
+        columns = ['table', 'columns']
+        return (columns,
+                (utils.get_dict_properties(s, columns,
+                                           formatters=formatters)
+                 for s in newdata))
+
+
+class ShowDatasourceTableSchema(lister.Lister):
+    """Show schema for datasource table."""
+
+    log = logging.getLogger(__name__ + '.ShowDatasourceTableSchema')
+
+    def get_parser(self, prog_name):
+        parser = super(ShowDatasourceTableSchema, self).get_parser(prog_name)
+        parser.add_argument(
+            'datasource_name',
+            metavar="<datasource-name>",
+            help="Name of the datasource")
+        parser.add_argument(
+            'table_name',
+            metavar="<table-name>",
+            help="Name of the table")
+        return parser
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)' % parsed_args)
+        client = self.app.client_manager.congressclient
+        data = client.show_datasource_table_schema(
+            parsed_args.datasource_name,
+            parsed_args.table_name)
+        columns = ['name', 'description']
+        return (columns,
+                (utils.get_dict_properties(s, columns)
+                 for s in data['columns']))
+
+
 class ListDatasourceRows(lister.Lister):
     """List datasource rows."""
 

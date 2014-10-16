@@ -47,6 +47,8 @@ class Client(object):
     datasources = '/v1/data-sources'
     datasource_tables = '/v1/data-sources/%s/tables'
     datasource_status = '/v1/data-sources/%s/status'
+    datasource_schema = '/v1/data-sources/%s/schema'
+    datasource_table_schema = '/v1/data-sources/%s/tables/%s/spec'
     datasource_rows = '/v1/data-sources/%s/tables/%s/rows'
 
     def __init__(self, **kwargs):
@@ -115,4 +117,14 @@ class Client(object):
     def list_datasource_status(self, datasource_name):
         resp, body = self.httpclient.get(self.datasource_status %
                                          datasource_name)
+        return body
+
+    def show_datasource_schema(self, datasource_name):
+        resp, body = self.httpclient.get(self.datasource_schema %
+                                         datasource_name)
+        return body
+
+    def show_datasource_table_schema(self, datasource_name, table_name):
+        resp, body = self.httpclient.get(self.datasource_table_schema %
+                                         (datasource_name, table_name))
         return body

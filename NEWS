@@ -5,6 +5,11 @@
     - python34 compatibility
     - New CLI command to simulate results of rule
         - openstack congress policy simulate  Show the result of simulation.
+    - Add new CLI command to check the status of a datasource
+        - openstack congress datasource status list
+    - Add new CLI for viewing schemas
+        - openstack congress datasource table schema show  Show schema for datasource table.
+        - openstack congress datasource schema show  Show schema for datasource.
 
 
 1.0.0 - 2014-09-29

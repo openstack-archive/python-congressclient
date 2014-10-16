@@ -91,6 +91,66 @@ class TestListDatasourceStatus(common.TestCongressBase):
         self.assertEqual(['key', 'value'], result[0])
 
 
+class TestShowDatasourceSchema(common.TestCongressBase):
+    def test_show_datasource_schema(self):
+        datasource_name = 'neutron'
+        arglist = [
+            datasource_name
+        ]
+        verifylist = [
+            ('datasource_name', datasource_name)
+        ]
+        response = {
+            "tables":
+                [{'table_id': 'ports',
+                  'columns': [{"name": "name", "description": "None"},
+                              {"name": "status", "description": "None"},
+                              {"name": "id", "description": "None"}]},
+                 {'table_id': 'routers',
+                  'columns': [{"name": "name", "description": "None"},
+                              {"name": "floating_ip", "description": "None"},
+                              {"name": "id", "description": "None"}]}]
+        }
+        lister = mock.Mock(return_value=response)
+        self.app.client_manager.congressclient.show_datasource_schema = lister
+        cmd = datasource.ShowDatasourceSchema(self.app, self.namespace)
+
+        parsed_args = self.check_parser(cmd, arglist, verifylist)
+        result = cmd.take_action(parsed_args)
+
+        lister.assert_called_with(datasource_name)
+        self.assertEqual(['table', 'columns'], result[0])
+
+
+class TestShowDatasourceTableSchema(common.TestCongressBase):
+    def test_show_datasource_table_schema(self):
+        datasource_name = 'neutron'
+        table_name = 'ports'
+        arglist = [
+            datasource_name, table_name
+        ]
+        verifylist = [
+            ('datasource_name', datasource_name),
+            ('table_name', table_name)
+        ]
+        response = {
+            'table_id': 'ports',
+            'columns': [{"name": "name", "description": "None"},
+                        {"name": "status", "description": "None"},
+                        {"name": "id", "description": "None"}]
+        }
+        lister = mock.Mock(return_value=response)
+        client = self.app.client_manager.congressclient
+        client.show_datasource_table_schema = lister
+        cmd = datasource.ShowDatasourceTableSchema(self.app, self.namespace)
+
+        parsed_args = self.check_parser(cmd, arglist, verifylist)
+        result = cmd.take_action(parsed_args)
+
+        lister.assert_called_with(datasource_name, table_name)
+        self.assertEqual(['name', 'description'], result[0])
+
+
 class TestListDatasourceRows(common.TestCongressBase):
 
     def test_list_datasource_row(self):
