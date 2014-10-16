@@ -67,6 +67,32 @@ class ListDatasourceTables(lister.Lister):
                  for s in data))
 
 
+class ListDatasourceStatus(lister.Lister):
+    """List status for datasource."""
+
+    log = logging.getLogger(__name__ + '.ListDatasourceStatus')
+
+    def get_parser(self, prog_name):
+        parser = super(ListDatasourceStatus, self).get_parser(prog_name)
+        parser.add_argument(
+            'datasource_name',
+            metavar="<datasource-name>",
+            help="Name of the datasource")
+        return parser
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)' % parsed_args)
+        client = self.app.client_manager.congressclient
+        data = client.list_datasource_status(
+            parsed_args.datasource_name)['results']
+        columns = ['key', 'value']
+        formatters = {'DatasourceStatus': utils.format_list}
+        return (columns,
+                (utils.get_dict_properties(s, columns,
+                                           formatters=formatters)
+                 for s in data))
+
+
 class ListDatasourceRows(lister.Lister):
     """List datasource rows."""
 

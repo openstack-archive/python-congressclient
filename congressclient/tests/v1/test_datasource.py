@@ -67,6 +67,30 @@ class TestListDatasourceTables(common.TestCongressBase):
         self.assertEqual(['id'], result[0])
 
 
+class TestListDatasourceStatus(common.TestCongressBase):
+    def test_list_datasource_status(self):
+        datasource_name = 'neutron'
+        arglist = [
+            datasource_name
+        ]
+        verifylist = [
+            ('datasource_name', datasource_name)
+        ]
+        response = {
+            "results": [("last_updated", "now"),
+                        ("last_error", "None")]
+        }
+        lister = mock.Mock(return_value=response)
+        self.app.client_manager.congressclient.list_datasource_status = lister
+        cmd = datasource.ListDatasourceStatus(self.app, self.namespace)
+
+        parsed_args = self.check_parser(cmd, arglist, verifylist)
+        result = cmd.take_action(parsed_args)
+
+        lister.assert_called_with(datasource_name)
+        self.assertEqual(['key', 'value'], result[0])
+
+
 class TestListDatasourceRows(common.TestCongressBase):
 
     def test_list_datasource_row(self):

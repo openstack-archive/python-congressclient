@@ -46,6 +46,7 @@ class Client(object):
     policy_action = '/v1/policies/%s?%s'
     datasources = '/v1/data-sources'
     datasource_tables = '/v1/data-sources/%s/tables'
+    datasource_status = '/v1/data-sources/%s/status'
     datasource_rows = '/v1/data-sources/%s/tables/%s/rows'
 
     def __init__(self, **kwargs):
@@ -109,4 +110,9 @@ class Client(object):
     def list_datasource_rows(self, datasource_name, table_name):
         resp, body = self.httpclient.get(self.datasource_rows %
                                          (datasource_name, table_name))
+        return body
+
+    def list_datasource_status(self, datasource_name):
+        resp, body = self.httpclient.get(self.datasource_status %
+                                         datasource_name)
         return body
