@@ -173,10 +173,10 @@ class ListDatasourceRows(lister.Lister):
         client = self.app.client_manager.congressclient
         results = client.list_datasource_rows(parsed_args.datasource_name,
                                               parsed_args.table)['results']
-
         if results:
-            columns = ['Col%s' % (i)
-                       for i in range(0, len(results[0]['data']))]
+            columns = client.show_datasource_table_schema(
+                parsed_args.datasource_name, parsed_args.table)['columns']
+            columns = [col['name'] for col in columns]
         else:
-            columns = ['data']
+            columns = ['data']  # doesn't matter because the rows are empty
         return (columns, (x['data'] for x in results))

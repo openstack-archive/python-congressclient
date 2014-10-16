@@ -167,13 +167,21 @@ class TestListDatasourceRows(common.TestCongressBase):
             "results": [{"data": ["69abc88b-c950-4625-801b-542e84381509",
                                   "default"]}]
         }
+        schema_response = {
+            'table_id': 'ports',
+            'columns': [{"name": "ID", "description": "None"},
+                        {"name": "name", "description": "None"}]
+        }
 
+        client = self.app.client_manager.congressclient
         lister = mock.Mock(return_value=response)
-        self.app.client_manager.congressclient.list_datasource_rows = lister
+        client.list_datasource_rows = lister
+        schema_lister = mock.Mock(return_value=schema_response)
+        client.show_datasource_table_schema = schema_lister
         cmd = datasource.ListDatasourceRows(self.app, self.namespace)
 
         parsed_args = self.check_parser(cmd, arglist, verifylist)
         result = cmd.take_action(parsed_args)
 
         lister.assert_called_with(datasource_name, table_name)
-        self.assertEqual(['Col0', 'Col1'], result[0])
+        self.assertEqual(['ID', 'name'], result[0])
