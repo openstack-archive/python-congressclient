@@ -17,6 +17,55 @@ from congressclient.osc.v1 import policy
 from congressclient.tests import common
 
 
+class TestCreatePolicy(common.TestCongressBase):
+
+    def test_create_policy(self):
+        policy_name = 'test1'
+        policy_id = "e531f2b3-3d97-42c0-b3b5-b7b6ab532018"
+        response = {"description": "",
+                    "id": policy_id,
+                    "name": policy_name,
+                    "kind": "nonrecursive",
+                    "owner": "system",
+                    "abbreviation": "test1"}
+
+        arglist = [policy_name]
+        verifylist = [
+            ('policy_name', policy_name),
+        ]
+
+        mocker = mock.Mock(return_value=response)
+        self.app.client_manager.congressclient.create_policy = mocker
+        cmd = policy.CreatePolicy(self.app, self.namespace)
+        parsed_args = self.check_parser(cmd, arglist, verifylist)
+        result = list(cmd.take_action(parsed_args))
+        filtered = [('abbreviation', 'description', 'id', 'kind', 'name',
+                     'owner'),
+                    (policy_name, '', policy_id, 'nonrecursive',
+                     policy_name, 'system')]
+        self.assertEqual(filtered, result)
+
+
+class TestDeletePolicy(common.TestCongressBase):
+    def test_delete_policy(self):
+        policy_id = 'e531f2b3-3d97-42c0-b3b5-b7b6ab532018'
+        arglist = [
+            policy_id
+        ]
+        verifylist = [
+            ('policy', policy_id)
+        ]
+        mocker = mock.Mock(return_value=None)
+        self.app.client_manager.congressclient.delete_policy = mocker
+        cmd = policy.DeletePolicy(self.app, self.namespace)
+
+        parsed_args = self.check_parser(cmd, arglist, verifylist)
+        result = cmd.take_action(parsed_args)
+
+        mocker.assert_called_with(policy_id)
+        self.assertEqual(None, result)
+
+
 class TestCreatePolicyRule(common.TestCongressBase):
 
     def test_create_policy_rule(self):
@@ -93,13 +142,17 @@ class TestListPolicyRules(common.TestCongressBase):
 class TestListPolicy(common.TestCongressBase):
     def test_list_policy_rules(self):
         policy_name = 'classification'
+        policy_id = 'e531f2b3-3d97-42c0-b3b5-b7b6ab532018'
         arglist = [
         ]
         verifylist = [
         ]
         response = {
-            "results": [{"id": policy_name,
-                         "owner": "system"
+            "results": [{"id": policy_id,
+                         "owner_id": "system",
+                         "name": policy_name,
+                         "kind": "nonrecursive",
+                         "description": "my description"
                          }]}
         lister = mock.Mock(return_value=response)
         self.app.client_manager.congressclient.list_policy = lister
@@ -109,7 +162,8 @@ class TestListPolicy(common.TestCongressBase):
         result = cmd.take_action(parsed_args)
 
         lister.assert_called_with()
-        self.assertEqual(['id', 'owner_id'], result[0])
+        self.assertEqual(['id', 'name', 'owner_id', 'kind', 'description'],
+                         result[0])
 
 
 class TestListPolicyTables(common.TestCongressBase):

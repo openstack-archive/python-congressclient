@@ -105,7 +105,7 @@ class ListPolicyRules(command.Command):
         results = client.list_policy_rules(parsed_args.policy_name)['results']
         for result in results:
             print("// ID: %s" % str(result['id']))
-            if result['comment'] != "None":
+            if result['comment'] != "None" and result['comment']:
                 print("// %s" % str(result['comment']))
             print(result['rule'])
             print('')
@@ -206,12 +206,70 @@ class ListPolicy(lister.Lister):
     def take_action(self, parsed_args):
         client = self.app.client_manager.congressclient
         data = client.list_policy()['results']
-        columns = ['id', 'owner_id']
+        columns = ['id', 'name', 'owner_id', 'kind', 'description']
         formatters = {'Policies': utils.format_list}
         return (columns,
                 (utils.get_dict_properties(s, columns,
                                            formatters=formatters)
                  for s in data))
+
+
+class CreatePolicy(show.ShowOne):
+    """Create a policy."""
+
+    log = logging.getLogger(__name__ + '.CreatePolicy')
+
+    def get_parser(self, prog_name):
+        parser = super(CreatePolicy, self).get_parser(prog_name)
+        parser.add_argument(
+            'policy_name',
+            metavar="<policy_name>",
+            help="Name of the policy")
+        parser.add_argument(
+            '--description',
+            metavar="<description>",
+            help="Policy description")
+        parser.add_argument(
+            '--abbreviation',
+            metavar="<abbreviation>",
+            help="Policy abbreviation (used in traces)")
+        parser.add_argument(
+            '--kind',
+            metavar="<kind>",
+            choices=['nonrecursive', 'database', 'action', 'materialized'],
+            help="Kind of policy: "
+                 "{nonrecursive, database, action, materialized}")
+        return parser
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)' % parsed_args)
+        client = self.app.client_manager.congressclient
+        body = {'name': parsed_args.policy_name,
+                'description': parsed_args.description,
+                'abbreviation': parsed_args.abbreviation,
+                'kind': parsed_args.kind}
+        data = client.create_policy(body)
+        return zip(*sorted(six.iteritems(data)))
+
+
+class DeletePolicy(command.Command):
+    """Delete a policy."""
+
+    log = logging.getLogger(__name__ + '.DeletePolicy')
+
+    def get_parser(self, prog_name):
+        parser = super(DeletePolicy, self).get_parser(prog_name)
+        parser.add_argument(
+            'policy',
+            metavar="<policy>",
+            help="ID or name of the policy to delete")
+        return parser
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)' % parsed_args)
+        client = self.app.client_manager.congressclient
+
+        client.delete_policy(parsed_args.policy)
 
 
 class ListPolicyRows(lister.Lister):

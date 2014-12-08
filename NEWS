@@ -10,6 +10,10 @@
     - Add new CLI for viewing schemas
         - openstack congress datasource table schema show  Show schema for datasource table.
         - openstack congress datasource schema show  Show schema for datasource.
+    - Add CLI for creating/deleting policies
+        - openstack congress policy create
+        - openstack congress policy delete
+
 
 
 1.0.0 - 2014-09-29
