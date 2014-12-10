@@ -1,4 +1,4 @@
-1.0.1 - XXXX-XX-XX
+1.0.1 - 2014-12-05
 ------------------
     - Add missing CLI command
         - openstack congress policy rule show
