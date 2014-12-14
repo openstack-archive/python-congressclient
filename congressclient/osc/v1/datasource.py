@@ -85,12 +85,17 @@ class ListDatasourceStatus(lister.Lister):
         client = self.app.client_manager.congressclient
         data = client.list_datasource_status(
             parsed_args.datasource_name)['results']
+        newdata = []
+        for d in data:
+            temp = [{'key': key, 'value': value}
+                    for key, value in d.items()]
+            newdata.append(temp[0])
         columns = ['key', 'value']
         formatters = {'DatasourceStatus': utils.format_list}
         return (columns,
                 (utils.get_dict_properties(s, columns,
                                            formatters=formatters)
-                 for s in data))
+                 for s in newdata))
 
 
 class ShowDatasourceSchema(lister.Lister):

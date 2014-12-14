@@ -77,8 +77,8 @@ class TestListDatasourceStatus(common.TestCongressBase):
             ('datasource_name', datasource_name)
         ]
         response = {
-            "results": [("last_updated", "now"),
-                        ("last_error", "None")]
+            "results": [{'last_updated': "now"},
+                        {'last_error': "None"}]
         }
         lister = mock.Mock(return_value=response)
         self.app.client_manager.congressclient.list_datasource_status = lister
