@@ -36,6 +36,8 @@ class Client(object):
 
     """
 
+    policy = '/v1/policies'
+    policy_path = '/v1/policies/%s'
     policy_rules = '/v1/policies/%s/rules'
     policy_rules_path = '/v1/policies/%s/rules/%s'
     policy_tables = '/v1/policies/%s/tables'
@@ -56,6 +58,21 @@ class Client(object):
 
         kwargs.setdefault('user_agent', 'python-congressclient')
         self.httpclient = adapter.LegacyJsonAdapter(**kwargs)
+
+    def create_policy(self, body):
+        resp, body = self.httpclient.post(
+            self.policy, body=body)
+        return body
+
+    def delete_policy(self, policy):
+        resp, body = self.httpclient.delete(
+            self.policy_path % policy)
+        return body
+
+    def show_policy(self, policy):
+        resp, body = self.httpclient.get(
+            self.policy_path % policy)
+        return body
 
     def create_policy_rule(self, policy_name, body=None):
         resp, body = self.httpclient.post(
