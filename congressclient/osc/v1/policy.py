@@ -20,6 +20,7 @@ import sys
 from cliff import command
 from cliff import lister
 from cliff import show
+from keystoneclient.openstack.common.apiclient import exceptions
 import six
 
 from congressclient.common import utils
@@ -34,6 +35,23 @@ def _format_rule(rule):
     for rule in rule_split[1].split("), "):
         formatted_string += rule + '\n'
     return formatted_string
+
+
+def get_rule_id_from_name(client, parsed_args):
+    results = client.list_policy_rules(parsed_args.policy_name)['results']
+    rule_id = None
+    for result in results:
+        if result.get('name') == parsed_args.rule_id:
+            if rule_id is None:
+                rule_id = result.get('id')
+            else:
+                raise exceptions.Conflict(
+                    "[Multiple rules with same name: %s]" %
+                    parsed_args.rule_id)
+    if rule_id is None:
+        raise exceptions.NotFound(
+            "[No rule found with name: %s]" % parsed_args.rule_id)
+    return rule_id
 
 
 class CreatePolicyRule(show.ShowOne):
@@ -51,13 +69,17 @@ class CreatePolicyRule(show.ShowOne):
             'rule',
             metavar="<rule>",
             help="Policy rule")
-
+        parser.add_argument(
+            '--name', dest="rule_name",
+            help="Name of the policy rule")
         return parser
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         client = self.app.client_manager.congressclient
         body = {'rule': parsed_args.rule}
+        if parsed_args.rule_name:
+            body['name'] = parsed_args.rule_name
         data = client.create_policy_rule(parsed_args.policy_name, body)
         return zip(*sorted(six.iteritems(data)))
 
@@ -75,15 +97,20 @@ class DeletePolicyRule(command.Command):
             help="Name of the policy to delete")
         parser.add_argument(
             'rule_id',
-            metavar="<rule-id>",
-            help="ID of the policy to delete")
+            metavar="<rule-id/rule-name>",
+            help="ID/Name of the policy rule to delete")
         return parser
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         client = self.app.client_manager.congressclient
-        client.delete_policy_rule(parsed_args.policy_name,
-                                  parsed_args.rule_id)
+        try:
+            client.delete_policy_rule(parsed_args.policy_name,
+                                      parsed_args.rule_id)
+        except exceptions.NotFound:
+            rule_id = get_rule_id_from_name(client, parsed_args)
+            if rule_id is not None:
+                client.delete_policy_rule(parsed_args.policy_name, rule_id)
 
 
 class ListPolicyRules(command.Command):
@@ -105,6 +132,7 @@ class ListPolicyRules(command.Command):
         results = client.list_policy_rules(parsed_args.policy_name)['results']
         for result in results:
             print("// ID: %s" % str(result['id']))
+            print("// Name: %s" % str(result.get('name')))
             if result['comment'] != "None" and result['comment']:
                 print("// %s" % str(result['comment']))
             print(result['rule'])
@@ -324,15 +352,21 @@ class ShowPolicyRule(show.ShowOne):
             metavar="<policy-name>",
             help="Name or identifier of the policy")
         parser.add_argument(
-            'id',
-            metavar="<rule>",
-            help="Policy rule id")
+            'rule_id',
+            metavar="<rule-id/rule-name>",
+            help="Policy rule id or rule name")
 
         return parser
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         client = self.app.client_manager.congressclient
-        data = client.show_policy_rule(parsed_args.policy_name,
-                                       parsed_args.id)
+        try:
+            data = client.show_policy_rule(parsed_args.policy_name,
+                                           parsed_args.rule_id)
+        except exceptions.NotFound:
+            rule_id = get_rule_id_from_name(client, parsed_args)
+            if rule_id is not None:
+                data = client.show_policy_rule(parsed_args.policy_name,
+                                               rule_id)
         return zip(*sorted(six.iteritems(data)))
