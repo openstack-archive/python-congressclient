@@ -160,8 +160,17 @@ class SimulatePolicy(command.Command):
             args['delta'] = parsed_args.delta
         if parsed_args.trace:
             args['trace'] = parsed_args.trace
+
+        body = {'query': parsed_args.query,
+                'sequence': parsed_args.sequence,
+                'action_policy': parsed_args.action_policy}
+
         results = client.execute_policy_action(
-            parsed_args.policy, 'simulate', args)
+            policy_name=parsed_args.policy,
+            action="simulate",
+            trace=parsed_args.trace,
+            delta=parsed_args.delta,
+            body=body)
         for result in results['result']:
             print(result)
         if 'trace' in results:

@@ -268,11 +268,14 @@ class TestSimulatePolicy(common.TestCongressBase):
         parsed_args = self.check_parser(cmd, arglist, verifylist)
         cmd.take_action(parsed_args)
 
-        args = {}
-        args['action_policy'] = action_name
-        args['sequence'] = sequence
-        args['query'] = query
-        lister.assert_called_with(policy_name, 'simulate', args)
+        body = {'action_policy': action_name,
+                'sequence': sequence,
+                'query': query}
+        lister.assert_called_with(policy_name=policy_name,
+                                  action='simulate',
+                                  trace=False,
+                                  delta=False,
+                                  body=body)
 
     def test_simulate_policy_delta(self):
         policy_name = 'classification'
@@ -298,12 +301,14 @@ class TestSimulatePolicy(common.TestCongressBase):
         parsed_args = self.check_parser(cmd, arglist, verifylist)
         cmd.take_action(parsed_args)
 
-        args = {}
-        args['action_policy'] = action_name
-        args['sequence'] = sequence
-        args['query'] = query
-        args['delta'] = True
-        lister.assert_called_with(policy_name, 'simulate', args)
+        body = {'action_policy': action_name,
+                'sequence': sequence,
+                'query': query}
+        lister.assert_called_with(policy_name=policy_name,
+                                  action='simulate',
+                                  trace=False,
+                                  delta=True,
+                                  body=body)
 
     def test_simulate_policy_trace(self):
         policy_name = 'classification'
@@ -329,12 +334,14 @@ class TestSimulatePolicy(common.TestCongressBase):
         parsed_args = self.check_parser(cmd, arglist, verifylist)
         cmd.take_action(parsed_args)
 
-        args = {}
-        args['action_policy'] = action_name
-        args['sequence'] = sequence
-        args['query'] = query
-        args['trace'] = True
-        lister.assert_called_with(policy_name, 'simulate', args)
+        body = {'action_policy': action_name,
+                'sequence': sequence,
+                'query': query}
+        lister.assert_called_with(policy_name=policy_name,
+                                  action='simulate',
+                                  trace=True,
+                                  delta=False,
+                                  body=body)
 
 
 class TestGet(common.TestCongressBase):
