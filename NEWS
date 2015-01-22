@@ -1,3 +1,11 @@
+1.0.2 - 2015-01-15
+------------------
+    - Add new CLI comment to create/delete policy
+        - congress policy create  Create a policy.
+        - congress policy delete  Delete a policy.
+    - Restructure simulate API to pass query/sequence/action_policy in body instead of URI.
+
+
 1.0.1 - 2014-12-05
 ------------------
     - Add missing CLI command
