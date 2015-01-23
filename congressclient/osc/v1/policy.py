@@ -379,3 +379,29 @@ class ShowPolicyRule(show.ShowOne):
                 data = client.show_policy_rule(parsed_args.policy_name,
                                                rule_id)
         return zip(*sorted(six.iteritems(data)))
+
+
+class ShowPolicyTable(show.ShowOne):
+    """Show policy table properties."""
+
+    log = logging.getLogger(__name__ + '.ShowPolicyTable')
+
+    def get_parser(self, prog_name):
+        parser = super(ShowPolicyTable, self).get_parser(prog_name)
+        parser.add_argument(
+            'policy_name',
+            metavar='<policy-name>',
+            help="Name of policy")
+        parser.add_argument(
+            'table_id',
+            metavar='<table-id>',
+            help="Table id")
+
+        return parser
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)' % parsed_args)
+        client = self.app.client_manager.congressclient
+        data = client.show_policy_table(parsed_args.policy_name,
+                                        parsed_args.table_id)
+        return zip(*sorted(six.iteritems(data)))
