@@ -39,6 +39,7 @@ class Client(object):
     policy_rules = '/v1/policies/%s/rules'
     policy_rules_path = '/v1/policies/%s/rules/%s'
     policy_tables = '/v1/policies/%s/tables'
+    policy_table_path = '/v1/policies/%s/tables/%s'
     policy_rows = '/v1/policies/%s/tables/%s/rows'
     policy_rows_trace = '/v1/policies/%s/tables/%s/rows?trace=True'
     policy_rules = '/v1/policies/%s/rules'
@@ -46,6 +47,7 @@ class Client(object):
     policy_action = '/v1/policies/%s?%s'
     datasources = '/v1/data-sources'
     datasource_tables = '/v1/data-sources/%s/tables'
+    datasource_table_path = '/v1/data-sources/%s/tables/%s'
     datasource_status = '/v1/data-sources/%s/status'
     datasource_schema = '/v1/data-sources/%s/schema'
     datasource_table_schema = '/v1/data-sources/%s/tables/%s/spec'
@@ -113,6 +115,11 @@ class Client(object):
             (self.policy_path % policy_name) + str(uri), body=body)
         return body
 
+    def show_policy_table(self, policy_name, table_id):
+        resp, body = self.httpclient.get(self.policy_table_path %
+                                         (policy_name, table_id))
+        return body
+
     def list_datasources(self):
         resp, body = self.httpclient.get(self.datasources)
         return body
@@ -140,4 +147,9 @@ class Client(object):
     def show_datasource_table_schema(self, datasource_name, table_name):
         resp, body = self.httpclient.get(self.datasource_table_schema %
                                          (datasource_name, table_name))
+        return body
+
+    def show_datasource_table(self, datasource_name, table_id):
+        resp, body = self.httpclient.get(self.datasource_table_path %
+                                         (datasource_name, table_id))
         return body

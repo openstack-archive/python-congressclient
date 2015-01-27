@@ -17,6 +17,8 @@
 import logging
 
 from cliff import lister
+from cliff import show
+import six
 
 from congressclient.common import utils
 
@@ -185,3 +187,29 @@ class ListDatasourceRows(lister.Lister):
         else:
             columns = ['data']  # doesn't matter because the rows are empty
         return (columns, (x['data'] for x in results))
+
+
+class ShowDatasourceTable(show.ShowOne):
+    """Show Datasource Table properties."""
+
+    log = logging.getLogger(__name__ + '.ShowDatasourceTable')
+
+    def get_parser(self, prog_name):
+        parser = super(ShowDatasourceTable, self).get_parser(prog_name)
+        parser.add_argument(
+            'datasource_name',
+            metavar='<datasource-name>',
+            help="Name of datasource")
+        parser.add_argument(
+            'table_id',
+            metavar='<table-id>',
+            help="Table id")
+
+        return parser
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)' % parsed_args)
+        client = self.app.client_manager.congressclient
+        data = client.show_datasource_table(parsed_args.datasource_name,
+                                            parsed_args.table_id)
+        return zip(*sorted(six.iteritems(data)))
