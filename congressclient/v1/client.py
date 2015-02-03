@@ -46,10 +46,12 @@ class Client(object):
     policies = '/v1/policies'
     policy_action = '/v1/policies/%s?%s'
     datasources = '/v1/data-sources'
+    datasource_path = '/v1/data-sources/%s'
     datasource_tables = '/v1/data-sources/%s/tables'
     datasource_table_path = '/v1/data-sources/%s/tables/%s'
     datasource_status = '/v1/data-sources/%s/status'
     datasource_schema = '/v1/data-sources/%s/schema'
+    datasource_config = '/v1/data-sources/%s/config'
     datasource_table_schema = '/v1/data-sources/%s/tables/%s/spec'
     datasource_rows = '/v1/data-sources/%s/tables/%s/rows'
 
@@ -152,4 +154,19 @@ class Client(object):
     def show_datasource_table(self, datasource_name, table_id):
         resp, body = self.httpclient.get(self.datasource_table_path %
                                          (datasource_name, table_id))
+        return body
+
+    def create_datasource(self, body=None):
+        resp, body = self.httpclient.post(
+            self.datasources, body=body)
+        return body
+
+    def show_datasource_config(self, datasource_name):
+        resp, body = self.httpclient.get(self.datasource_config %
+                                         datasource_name)
+        return body
+
+    def delete_datasource(self, datasource):
+        resp, body = self.httpclient.delete(
+            self.datasource_path % datasource)
         return body

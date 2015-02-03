@@ -16,8 +16,10 @@
 
 import logging
 
+from cliff import command
 from cliff import lister
 from cliff import show
+from openstackclient.common import parseractions
 import six
 
 from congressclient.common import utils
@@ -213,3 +215,84 @@ class ShowDatasourceTable(show.ShowOne):
         data = client.show_datasource_table(parsed_args.datasource_name,
                                             parsed_args.table_id)
         return zip(*sorted(six.iteritems(data)))
+
+
+class CreateDatasource(show.ShowOne):
+    """Create a datasource."""
+
+    log = logging.getLogger(__name__ + '.CreateDatasource')
+
+    def get_parser(self, prog_name):
+        parser = super(CreateDatasource, self).get_parser(prog_name)
+        parser.add_argument(
+            'datasource_driver',
+            metavar="<datasource-driver>",
+            help="Selected datasource driver")
+        parser.add_argument(
+            'name',
+            metavar="<datasource-name>",
+            help="Name you want to call the datasource")
+        parser.add_argument(
+            '--description',
+            metavar="<datasource-description>",
+            help="Description of the datasource")
+
+        parser.add_argument(
+            '--config',
+            metavar="<key=value>",
+            action=parseractions.KeyValueAction,
+            help="config dictionary to pass in")
+
+        return parser
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)' % parsed_args)
+        client = self.app.client_manager.congressclient
+        body = {'name': parsed_args.name,
+                'datasource_driver': parsed_args.datasource_driver,
+                'config': parsed_args.config}
+        if parsed_args.description:
+            body['description'] = parsed_args.description
+        results = client.create_datasource(body)
+        return zip(*sorted(six.iteritems(results)))
+
+
+class ShowDatasourceConfig(show.ShowOne):
+    """Show config for datasource."""
+
+    log = logging.getLogger(__name__ + '.ShowDatasourceConfig')
+
+    def get_parser(self, prog_name):
+        parser = super(ShowDatasourceConfig, self).get_parser(prog_name)
+        parser.add_argument(
+            'datasource_name',
+            metavar="<datasource-name>",
+            help="Name of the datasource")
+        return parser
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)' % parsed_args)
+        client = self.app.client_manager.congressclient
+        data = client.show_datasource_config(
+            parsed_args.datasource_name)
+
+        return zip(*sorted(six.iteritems(data)))
+
+
+class DeleteDatasource(command.Command):
+    """Delete a datasource."""
+
+    log = logging.getLogger(__name__ + '.DeletePolicyRule')
+
+    def get_parser(self, prog_name):
+        parser = super(DeleteDatasource, self).get_parser(prog_name)
+        parser.add_argument(
+            'datasource',
+            metavar="<datasource-name>",
+            help="Name of the policy to delete")
+        return parser
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)' % parsed_args)
+        client = self.app.client_manager.congressclient
+        client.delete_datasource(parsed_args.datasource)
