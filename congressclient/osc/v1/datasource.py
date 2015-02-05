@@ -19,10 +19,36 @@ import logging
 from cliff import command
 from cliff import lister
 from cliff import show
+from keystoneclient.openstack.common.apiclient import exceptions
 from openstackclient.common import parseractions
 import six
 
 from congressclient.common import utils
+
+
+def get_resource_id_from_name(name, results):
+    # FIXME(arosen): move to common lib and add tests...
+    name_match = None
+    id_match = None
+    double_name_match = False
+    for result in results['results']:
+        if result['id'] == name:
+            id_match = result['id']
+        if result['name'] == name:
+            if name_match:
+                double_name_match = True
+            name_match = result['id']
+    if not double_name_match and name_match:
+        return name_match
+    if double_name_match and not id_match:
+        # NOTE(arosen): this should only occur is using congress
+        # as admin and multiple tenants use the same datsource name.
+        raise exceptions.Conflict(
+            "Multiple resources have this name %s. Delete by id." % name)
+    if id_match:
+        return id_match
+
+    raise exceptions.NotFound("Resource %s not found" % name)
 
 
 class ListDatasources(lister.Lister):
@@ -37,7 +63,7 @@ class ListDatasources(lister.Lister):
     def take_action(self, parsed_args):
         client = self.app.client_manager.congressclient
         data = client.list_datasources()['results']
-        columns = ['id', 'owner_id', 'enabled', 'type', 'config']
+        columns = ['id', 'name', 'enabled', 'type', 'config']
         formatters = {'Datasources': utils.format_list}
         return (columns,
                 (utils.get_dict_properties(s, columns,
@@ -87,8 +113,12 @@ class ListDatasourceStatus(lister.Lister):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         client = self.app.client_manager.congressclient
-        data = client.list_datasource_status(
-            parsed_args.datasource_name)['results']
+
+        results = client.list_datasources()
+        datasource_id = get_resource_id_from_name(parsed_args.datasource_name,
+                                                  results)
+
+        data = client.list_datasource_status(datasource_id)['results']
         newdata = []
         for d in data:
             temp = [{'key': key, 'value': value}
@@ -118,8 +148,10 @@ class ShowDatasourceSchema(lister.Lister):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         client = self.app.client_manager.congressclient
-        data = client.show_datasource_schema(
-            parsed_args.datasource_name)
+        results = client.list_datasources()
+        datasource_id = get_resource_id_from_name(parsed_args.datasource_name,
+                                                  results)
+        data = client.show_datasource_schema(datasource_id)
         formatters = {'columns': utils.format_long_dict_list}
         newdata = [{'table': x['table_id'],
                     'columns': x['columns']}
@@ -225,7 +257,7 @@ class CreateDatasource(show.ShowOne):
     def get_parser(self, prog_name):
         parser = super(CreateDatasource, self).get_parser(prog_name)
         parser.add_argument(
-            'datasource_driver',
+            'driver',
             metavar="<datasource-driver>",
             help="Selected datasource driver")
         parser.add_argument(
@@ -249,34 +281,12 @@ class CreateDatasource(show.ShowOne):
         self.log.debug('take_action(%s)' % parsed_args)
         client = self.app.client_manager.congressclient
         body = {'name': parsed_args.name,
-                'datasource_driver': parsed_args.datasource_driver,
+                'driver': parsed_args.driver,
                 'config': parsed_args.config}
         if parsed_args.description:
             body['description'] = parsed_args.description
         results = client.create_datasource(body)
         return zip(*sorted(six.iteritems(results)))
-
-
-class ShowDatasourceConfig(show.ShowOne):
-    """Show config for datasource."""
-
-    log = logging.getLogger(__name__ + '.ShowDatasourceConfig')
-
-    def get_parser(self, prog_name):
-        parser = super(ShowDatasourceConfig, self).get_parser(prog_name)
-        parser.add_argument(
-            'datasource_name',
-            metavar="<datasource-name>",
-            help="Name of the datasource")
-        return parser
-
-    def take_action(self, parsed_args):
-        self.log.debug('take_action(%s)' % parsed_args)
-        client = self.app.client_manager.congressclient
-        data = client.show_datasource_config(
-            parsed_args.datasource_name)
-
-        return zip(*sorted(six.iteritems(data)))
 
 
 class DeleteDatasource(command.Command):
@@ -295,4 +305,7 @@ class DeleteDatasource(command.Command):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         client = self.app.client_manager.congressclient
-        client.delete_datasource(parsed_args.datasource)
+        results = client.list_datasources()
+        datasource_id = get_resource_id_from_name(parsed_args.datasource,
+                                                  results)
+        client.delete_datasource(datasource_id)

@@ -51,9 +51,10 @@ class Client(object):
     datasource_table_path = '/v1/data-sources/%s/tables/%s'
     datasource_status = '/v1/data-sources/%s/status'
     datasource_schema = '/v1/data-sources/%s/schema'
-    datasource_config = '/v1/data-sources/%s/config'
     datasource_table_schema = '/v1/data-sources/%s/tables/%s/spec'
     datasource_rows = '/v1/data-sources/%s/tables/%s/rows'
+    driver = '/v1/system/drivers'
+    driver_path = '/v1/system/drivers/%s'
 
     def __init__(self, **kwargs):
         super(Client, self).__init__()
@@ -161,12 +162,16 @@ class Client(object):
             self.datasources, body=body)
         return body
 
-    def show_datasource_config(self, datasource_name):
-        resp, body = self.httpclient.get(self.datasource_config %
-                                         datasource_name)
-        return body
-
     def delete_datasource(self, datasource):
         resp, body = self.httpclient.delete(
             self.datasource_path % datasource)
+        return body
+
+    def list_drivers(self):
+        resp, body = self.httpclient.get(self.driver)
+        return body
+
+    def show_driver(self, driver):
+        resp, body = self.httpclient.get(self.driver_path %
+                                         (driver))
         return body

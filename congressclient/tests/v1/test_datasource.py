@@ -26,7 +26,7 @@ class TestListDatasources(common.TestCongressBase):
         ]
         response = {
             "results": [{"id": datasource_name,
-                         "owner_id": "system",
+                         "name": "my_name",
                          "enabled": "True",
                          "type": "None",
                          "config": "None"}]
@@ -39,7 +39,7 @@ class TestListDatasources(common.TestCongressBase):
         result = cmd.take_action(parsed_args)
 
         lister.assert_called_with()
-        self.assertEqual(['id', 'owner_id', 'enabled', 'type', 'config'],
+        self.assertEqual(['id', 'name', 'enabled', 'type', 'config'],
                          result[0])
 
 
@@ -82,12 +82,15 @@ class TestListDatasourceStatus(common.TestCongressBase):
         }
         lister = mock.Mock(return_value=response)
         self.app.client_manager.congressclient.list_datasource_status = lister
+        self.app.client_manager.congressclient.list_datasources = mock.Mock()
         cmd = datasource.ListDatasourceStatus(self.app, self.namespace)
 
         parsed_args = self.check_parser(cmd, arglist, verifylist)
-        result = cmd.take_action(parsed_args)
+        with mock.patch.object(datasource, "get_resource_id_from_name",
+                               return_value="id"):
+            result = cmd.take_action(parsed_args)
 
-        lister.assert_called_with(datasource_name)
+        lister.assert_called_with("id")
         self.assertEqual(['key', 'value'], result[0])
 
 
@@ -113,12 +116,15 @@ class TestShowDatasourceSchema(common.TestCongressBase):
         }
         lister = mock.Mock(return_value=response)
         self.app.client_manager.congressclient.show_datasource_schema = lister
+        self.app.client_manager.congressclient.list_datasources = mock.Mock()
         cmd = datasource.ShowDatasourceSchema(self.app, self.namespace)
 
         parsed_args = self.check_parser(cmd, arglist, verifylist)
-        result = cmd.take_action(parsed_args)
+        with mock.patch.object(datasource, "get_resource_id_from_name",
+                               return_value="id"):
+            result = cmd.take_action(parsed_args)
 
-        lister.assert_called_with(datasource_name)
+        lister.assert_called_with("id")
         self.assertEqual(['table', 'columns'], result[0])
 
 
@@ -190,7 +196,7 @@ class TestListDatasourceRows(common.TestCongressBase):
 class TestCreateDatasource(common.TestCongressBase):
 
     def test_create_datasource(self):
-        datasource_driver = 'neutronv2'
+        driver = 'neutronv2'
         name = 'arosen-neutronv2'
         response = {"description": '',
                     "config": {"username": "admin",
@@ -199,18 +205,18 @@ class TestCreateDatasource(common.TestCongressBase):
                                "auth_url": "http://127.0.0.1:5000/v2.0"},
                     "enabled": True,
                     "owner": "user",
-                    "datasource_driver": "neutronv2",
+                    "driver": "neutronv2",
                     "type": None,
                     "id": "b72f81a0-32b5-4bf4-a1f6-d69c09c42cec",
                     "name": "arosen-neutronv2"}
 
-        arglist = [datasource_driver, name,
+        arglist = [driver, name,
                    "--config", "username=admin",
                    "--config", "password=password",
                    "--config", "auth_url=http://1.1.1.1/foo",
                    "--config", "tenant_name=admin"]
         verifylist = [
-            ('datasource_driver', datasource_driver),
+            ('driver', driver),
             ('name', name),
             ('config', {'username': 'admin', 'password': 'password',
                         'auth_url': 'http://1.1.1.1/foo',
@@ -222,61 +228,31 @@ class TestCreateDatasource(common.TestCongressBase):
         cmd = datasource.CreateDatasource(self.app, self.namespace)
         parsed_args = self.check_parser(cmd, arglist, verifylist)
         result = list(cmd.take_action(parsed_args))
-        filtered = [('config', 'datasource_driver',
-                     'description', 'enabled', 'id', 'name',
+        filtered = [('config', 'description',
+                     'driver', 'enabled', 'id', 'name',
                      'owner', 'type'),
-                    (response['config'], response['datasource_driver'],
-                     response['description'], response['enabled'],
+                    (response['config'], response['description'],
+                     response['driver'], response['enabled'],
                      response['id'], response['name'],
-                     response['owner'], response['type'])]
-        self.assertEqual(filtered, result)
-
-
-class TestShowDatasourceConfig(common.TestCongressBase):
-
-    def test_show_datasource_config(self):
-        datasource_driver = 'neutronv2'
-        response = {"description": '',
-                    "config": {"username": "admin",
-                               "tenant_name": "admin",
-                               "password": "password",
-                               "auth_url": "http://127.0.0.1:5000/v2.0"},
-                    "enabled": True,
-                    "owner": "user",
-                    "datasource_driver": "neutronv2",
-                    "type": None,
-                    "name": "arosen-neutronv2"}
-
-        arglist = [datasource_driver]
-        verifylist = [('datasource_name', datasource_driver), ]
-
-        mocker = mock.Mock(return_value=response)
-        self.app.client_manager.congressclient.show_datasource_config = mocker
-        cmd = datasource.ShowDatasourceConfig(self.app, self.namespace)
-        parsed_args = self.check_parser(cmd, arglist, verifylist)
-        result = list(cmd.take_action(parsed_args))
-        filtered = [('config', 'datasource_driver',
-                     'description', 'enabled', 'name',
-                     'owner', 'type'),
-                    (response['config'], response['datasource_driver'],
-                     response['description'], response['enabled'],
-                     response['name'],
                      response['owner'], response['type'])]
         self.assertEqual(filtered, result)
 
 
 class TestDeleteDatasourceDriver(common.TestCongressBase):
 
-    def test_delete_datasource_driver(self):
-        datasource_driver = 'neutronv2'
+    def test_delete_datasource(self):
+        driver = 'neutronv2'
 
-        arglist = [datasource_driver]
-        verifylist = [('datasource', datasource_driver), ]
+        arglist = [driver]
+        verifylist = [('datasource', driver), ]
 
         mocker = mock.Mock(return_value=None)
         self.app.client_manager.congressclient.delete_datasource = mocker
+        self.app.client_manager.congressclient.list_datasources = mock.Mock()
         cmd = datasource.DeleteDatasource(self.app, self.namespace)
         parsed_args = self.check_parser(cmd, arglist, verifylist)
-        result = cmd.take_action(parsed_args)
-        mocker.assert_called_with(datasource_driver)
+        with mock.patch.object(datasource, "get_resource_id_from_name",
+                               return_value="id"):
+            result = cmd.take_action(parsed_args)
+        mocker.assert_called_with("id")
         self.assertEqual(None, result)
