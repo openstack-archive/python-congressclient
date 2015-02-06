@@ -97,13 +97,13 @@ class ListDatasourceTables(lister.Lister):
                  for s in data))
 
 
-class ListDatasourceStatus(lister.Lister):
+class ShowDatasourceStatus(show.ShowOne):
     """List status for datasource."""
 
-    log = logging.getLogger(__name__ + '.ListDatasourceStatus')
+    log = logging.getLogger(__name__ + '.ShowDatasourceStatus')
 
     def get_parser(self, prog_name):
-        parser = super(ListDatasourceStatus, self).get_parser(prog_name)
+        parser = super(ShowDatasourceStatus, self).get_parser(prog_name)
         parser.add_argument(
             'datasource_name',
             metavar="<datasource-name>",
@@ -118,18 +118,8 @@ class ListDatasourceStatus(lister.Lister):
         datasource_id = get_resource_id_from_name(parsed_args.datasource_name,
                                                   results)
 
-        data = client.list_datasource_status(datasource_id)['results']
-        newdata = []
-        for d in data:
-            temp = [{'key': key, 'value': value}
-                    for key, value in d.items()]
-            newdata.append(temp[0])
-        columns = ['key', 'value']
-        formatters = {'DatasourceStatus': utils.format_list}
-        return (columns,
-                (utils.get_dict_properties(s, columns,
-                                           formatters=formatters)
-                 for s in newdata))
+        data = client.list_datasource_status(datasource_id)
+        return zip(*sorted(six.iteritems(data)))
 
 
 class ShowDatasourceSchema(lister.Lister):

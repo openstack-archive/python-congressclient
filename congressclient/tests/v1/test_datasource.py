@@ -76,22 +76,23 @@ class TestListDatasourceStatus(common.TestCongressBase):
         verifylist = [
             ('datasource_name', datasource_name)
         ]
-        response = {
-            "results": [{'last_updated': "now"},
-                        {'last_error': "None"}]
-        }
+        response = {'last_updated': "now",
+                    'last_error': "None"}
+
         lister = mock.Mock(return_value=response)
         self.app.client_manager.congressclient.list_datasource_status = lister
         self.app.client_manager.congressclient.list_datasources = mock.Mock()
-        cmd = datasource.ListDatasourceStatus(self.app, self.namespace)
+        cmd = datasource.ShowDatasourceStatus(self.app, self.namespace)
 
         parsed_args = self.check_parser(cmd, arglist, verifylist)
         with mock.patch.object(datasource, "get_resource_id_from_name",
                                return_value="id"):
-            result = cmd.take_action(parsed_args)
+            result = list(cmd.take_action(parsed_args))
 
         lister.assert_called_with("id")
-        self.assertEqual(['key', 'value'], result[0])
+        self.assertEqual([('last_error', 'last_updated'),
+                          ('None', 'now')],
+                         result)
 
 
 class TestShowDatasourceSchema(common.TestCongressBase):
