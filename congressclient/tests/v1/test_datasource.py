@@ -182,15 +182,18 @@ class TestListDatasourceRows(common.TestCongressBase):
 
         client = self.app.client_manager.congressclient
         lister = mock.Mock(return_value=response)
+        self.app.client_manager.congressclient.list_datasources = mock.Mock()
         client.list_datasource_rows = lister
         schema_lister = mock.Mock(return_value=schema_response)
         client.show_datasource_table_schema = schema_lister
         cmd = datasource.ListDatasourceRows(self.app, self.namespace)
 
         parsed_args = self.check_parser(cmd, arglist, verifylist)
-        result = cmd.take_action(parsed_args)
+        with mock.patch.object(datasource, "get_resource_id_from_name",
+                               return_value="id"):
+            result = cmd.take_action(parsed_args)
 
-        lister.assert_called_with(datasource_name, table_name)
+        lister.assert_called_with('id', table_name)
         self.assertEqual(['ID', 'name'], result[0])
 
 

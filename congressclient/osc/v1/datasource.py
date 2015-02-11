@@ -202,11 +202,15 @@ class ListDatasourceRows(lister.Lister):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         client = self.app.client_manager.congressclient
-        results = client.list_datasource_rows(parsed_args.datasource_name,
+
+        results = client.list_datasources()
+        datasource_id = get_resource_id_from_name(parsed_args.datasource_name,
+                                                  results)
+        results = client.list_datasource_rows(datasource_id,
                                               parsed_args.table)['results']
         if results:
             columns = client.show_datasource_table_schema(
-                parsed_args.datasource_name, parsed_args.table)['columns']
+                datasource_id, parsed_args.table)['columns']
             columns = [col['name'] for col in columns]
         else:
             columns = ['data']  # doesn't matter because the rows are empty
