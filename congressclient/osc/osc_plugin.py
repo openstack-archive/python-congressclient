@@ -14,8 +14,6 @@
 
 import logging
 
-import keystoneclient
-
 from congressclient.common import utils
 
 LOG = logging.getLogger(__name__)
@@ -34,13 +32,8 @@ def make_client(instance):
         API_NAME,
         instance._api_version[API_NAME],
         API_VERSIONS)
-    auth = keystoneclient.auth.identity.v2.Password(
-        auth_url=instance._auth_url,
-        username=instance._username,
-        password=instance._password, tenant_name=instance._project_name)
-    session = keystoneclient.session.Session(auth=auth)
     LOG.debug('instantiating congress client: %s', congress_client)
-    return congress_client(session=session,
+    return congress_client(session=instance.session,
                            auth=None,
                            interface='publicURL',
                            service_type='policy',
