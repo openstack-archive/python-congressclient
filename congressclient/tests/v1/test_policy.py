@@ -46,6 +46,34 @@ class TestCreatePolicy(common.TestCongressBase):
         self.assertEqual(filtered, result)
 
 
+class TestShowPolicy(common.TestCongressBase):
+    def test_show_policy(self):
+        policy_id = "14f2897a-155a-4c9d-b3de-ef85c0a171d8"
+        policy_name = "test1"
+        arglist = [policy_id]
+        verifylist = [
+            ('policy_name', policy_id),
+        ]
+        response = {"description": "",
+                    "id": policy_id,
+                    "name": policy_name,
+                    "kind": "nonrecursive",
+                    "owner": "system",
+                    "abbreviation": "test1"}
+
+        mocker = mock.Mock(return_value=response)
+        self.app.client_manager.congressclient.show_policy = mocker
+        cmd = policy.ShowPolicy(self.app, self.namespace)
+
+        parsed_args = self.check_parser(cmd, arglist, verifylist)
+        result = list(cmd.take_action(parsed_args))
+        filtered = [('abbreviation', 'description', 'id', 'kind', 'name',
+                     'owner'),
+                    (policy_name, '', policy_id, 'nonrecursive',
+                     policy_name, 'system')]
+        self.assertEqual(filtered, result)
+
+
 class TestDeletePolicy(common.TestCongressBase):
     def test_delete_policy(self):
         policy_id = 'e531f2b3-3d97-42c0-b3b5-b7b6ab532018'
