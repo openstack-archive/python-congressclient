@@ -58,13 +58,16 @@ class TestListDatasourceTables(common.TestCongressBase):
                         {"id": "networks"}]
         }
         lister = mock.Mock(return_value=response)
+        self.app.client_manager.congressclient.list_datasources = mock.Mock()
         self.app.client_manager.congressclient.list_datasource_tables = lister
         cmd = datasource.ListDatasourceTables(self.app, self.namespace)
 
         parsed_args = self.check_parser(cmd, arglist, verifylist)
-        result = cmd.take_action(parsed_args)
 
-        lister.assert_called_with(datasource_name)
+        with mock.patch.object(utils, "get_resource_id_from_name",
+                               return_value="id"):
+            result = cmd.take_action(parsed_args)
+        lister.assert_called_with("id")
         self.assertEqual(['id'], result[0])
 
 

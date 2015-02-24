@@ -61,8 +61,10 @@ class ListDatasourceTables(lister.Lister):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         client = self.app.client_manager.congressclient
-        data = client.list_datasource_tables(
-            parsed_args.datasource_name)['results']
+        results = client.list_datasources()
+        datasource_id = utils.get_resource_id_from_name(
+            parsed_args.datasource_name, results)
+        data = client.list_datasource_tables(datasource_id)['results']
         columns = ['id']
         formatters = {'DatasourceTables': utils.format_list}
         return (columns,
