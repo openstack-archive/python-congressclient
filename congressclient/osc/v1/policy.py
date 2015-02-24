@@ -104,13 +104,10 @@ class DeletePolicyRule(command.Command):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         client = self.app.client_manager.congressclient
-        try:
-            client.delete_policy_rule(parsed_args.policy_name,
-                                      parsed_args.rule_id)
-        except exceptions.NotFound:
-            rule_id = get_rule_id_from_name(client, parsed_args)
-            if rule_id is not None:
-                client.delete_policy_rule(parsed_args.policy_name, rule_id)
+        results = client.list_policy_rules(parsed_args.policy_name)
+        rule_id = utils.get_resource_id_from_name(
+            parsed_args.rule_id, results)
+        client.delete_policy_rule(parsed_args.policy_name, rule_id)
 
 
 class ListPolicyRules(command.Command):
@@ -370,14 +367,10 @@ class ShowPolicyRule(show.ShowOne):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         client = self.app.client_manager.congressclient
-        try:
-            data = client.show_policy_rule(parsed_args.policy_name,
-                                           parsed_args.rule_id)
-        except exceptions.NotFound:
-            rule_id = get_rule_id_from_name(client, parsed_args)
-            if rule_id is not None:
-                data = client.show_policy_rule(parsed_args.policy_name,
-                                               rule_id)
+        results = client.list_policy_rules(parsed_args.policy_name)
+        rule_id = utils.get_resource_id_from_name(
+            parsed_args.rule_id, results)
+        data = client.show_policy_rule(parsed_args.policy_name, rule_id)
         return zip(*sorted(six.iteritems(data)))
 
 
@@ -424,5 +417,8 @@ class ShowPolicy(show.ShowOne):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         client = self.app.client_manager.congressclient
-        data = client.show_policy(parsed_args.policy_name)
+        results = client.list_policy()
+        policy_id = utils.get_resource_id_from_name(
+            parsed_args.policy_name, results)
+        data = client.show_policy(policy_id)
         return zip(*sorted(six.iteritems(data)))

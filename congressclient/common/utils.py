@@ -102,3 +102,28 @@ def get_dict_properties(item, fields, mixed_case_fields=[], formatters={}):
         else:
             row.append(data)
     return tuple(row)
+
+
+def get_resource_id_from_name(name, results):
+    # FIXME(arosen): move to common lib and add tests...
+    name_match = None
+    id_match = None
+    double_name_match = False
+    for result in results['results']:
+        if result['id'] == name:
+            id_match = result['id']
+        if result['name'] == name:
+            if name_match:
+                double_name_match = True
+            name_match = result['id']
+    if not double_name_match and name_match:
+        return name_match
+    if double_name_match and not id_match:
+        # NOTE(arosen): this should only occur is using congress
+        # as admin and multiple tenants use the same datsource name.
+        raise exceptions.Conflict(
+            "Multiple resources have this name %s. Delete by id." % name)
+    if id_match:
+        return id_match
+
+    raise exceptions.NotFound("Resource %s not found" % name)

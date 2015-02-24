@@ -13,6 +13,7 @@
 
 import mock
 
+from congressclient.common import utils
 from congressclient.osc.v1 import policy
 from congressclient.tests import common
 
@@ -63,10 +64,12 @@ class TestShowPolicy(common.TestCongressBase):
 
         mocker = mock.Mock(return_value=response)
         self.app.client_manager.congressclient.show_policy = mocker
+        self.app.client_manager.congressclient.list_policy = mock.Mock()
         cmd = policy.ShowPolicy(self.app, self.namespace)
-
         parsed_args = self.check_parser(cmd, arglist, verifylist)
-        result = list(cmd.take_action(parsed_args))
+        with mock.patch.object(utils, "get_resource_id_from_name",
+                               return_value="name"):
+            result = list(cmd.take_action(parsed_args))
         filtered = [('abbreviation', 'description', 'id', 'kind', 'name',
                      'owner'),
                     (policy_name, '', policy_id, 'nonrecursive',
@@ -85,10 +88,13 @@ class TestDeletePolicy(common.TestCongressBase):
         ]
         mocker = mock.Mock(return_value=None)
         self.app.client_manager.congressclient.delete_policy = mocker
+        self.app.client_manager.congressclient.list_policy = mock.Mock()
         cmd = policy.DeletePolicy(self.app, self.namespace)
 
         parsed_args = self.check_parser(cmd, arglist, verifylist)
-        result = cmd.take_action(parsed_args)
+        with mock.patch.object(utils, "get_resource_id_from_name",
+                               return_value="id"):
+            result = cmd.take_action(parsed_args)
 
         mocker.assert_called_with(policy_id)
         self.assertEqual(None, result)
@@ -158,10 +164,13 @@ class TestDeletePolicyRule(common.TestCongressBase):
         ]
         mocker = mock.Mock(return_value=None)
         self.app.client_manager.congressclient.delete_policy_rule = mocker
+        self.app.client_manager.congressclient.list_policy_rules = mock.Mock()
         cmd = policy.DeletePolicyRule(self.app, self.namespace)
 
         parsed_args = self.check_parser(cmd, arglist, verifylist)
-        result = cmd.take_action(parsed_args)
+        with mock.patch.object(utils, "get_resource_id_from_name",
+                               return_value=rule_id):
+            result = cmd.take_action(parsed_args)
 
         mocker.assert_called_with(policy_name, rule_id)
         self.assertEqual(None, result)
@@ -416,9 +425,12 @@ class TestGet(common.TestCongressBase):
 
         mocker = mock.Mock(return_value=response)
         self.app.client_manager.congressclient.show_policy_rule = mocker
+        self.app.client_manager.congressclient.list_policy_rules = mock.Mock()
         cmd = policy.ShowPolicyRule(self.app, self.namespace)
         parsed_args = self.check_parser(cmd, arglist, verifylist)
-        result = list(cmd.take_action(parsed_args))
+        with mock.patch.object(utils, "get_resource_id_from_name",
+                               return_value="id"):
+            result = list(cmd.take_action(parsed_args))
         filtered = [('comment', 'id', 'rule'),
                     ('None', id, rule)]
         self.assertEqual(filtered, result)

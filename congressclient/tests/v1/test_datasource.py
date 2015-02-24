@@ -13,6 +13,7 @@
 
 import mock
 
+from congressclient.common import utils
 from congressclient.osc.v1 import datasource
 from congressclient.tests import common
 
@@ -85,7 +86,7 @@ class TestListDatasourceStatus(common.TestCongressBase):
         cmd = datasource.ShowDatasourceStatus(self.app, self.namespace)
 
         parsed_args = self.check_parser(cmd, arglist, verifylist)
-        with mock.patch.object(datasource, "get_resource_id_from_name",
+        with mock.patch.object(utils, "get_resource_id_from_name",
                                return_value="id"):
             result = list(cmd.take_action(parsed_args))
 
@@ -121,7 +122,7 @@ class TestShowDatasourceSchema(common.TestCongressBase):
         cmd = datasource.ShowDatasourceSchema(self.app, self.namespace)
 
         parsed_args = self.check_parser(cmd, arglist, verifylist)
-        with mock.patch.object(datasource, "get_resource_id_from_name",
+        with mock.patch.object(utils, "get_resource_id_from_name",
                                return_value="id"):
             result = cmd.take_action(parsed_args)
 
@@ -189,7 +190,7 @@ class TestListDatasourceRows(common.TestCongressBase):
         cmd = datasource.ListDatasourceRows(self.app, self.namespace)
 
         parsed_args = self.check_parser(cmd, arglist, verifylist)
-        with mock.patch.object(datasource, "get_resource_id_from_name",
+        with mock.patch.object(utils, "get_resource_id_from_name",
                                return_value="id"):
             result = cmd.take_action(parsed_args)
 
@@ -255,7 +256,7 @@ class TestDeleteDatasourceDriver(common.TestCongressBase):
         self.app.client_manager.congressclient.list_datasources = mock.Mock()
         cmd = datasource.DeleteDatasource(self.app, self.namespace)
         parsed_args = self.check_parser(cmd, arglist, verifylist)
-        with mock.patch.object(datasource, "get_resource_id_from_name",
+        with mock.patch.object(utils, "get_resource_id_from_name",
                                return_value="id"):
             result = cmd.take_action(parsed_args)
         mocker.assert_called_with("id")
