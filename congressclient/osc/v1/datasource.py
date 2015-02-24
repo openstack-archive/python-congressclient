@@ -20,9 +20,9 @@ from cliff import command
 from cliff import lister
 from cliff import show
 from keystoneclient.openstack.common.apiclient import exceptions
-from openstackclient.common import parseractions
 import six
 
+from congressclient.common import parseractions
 from congressclient.common import utils
 
 
