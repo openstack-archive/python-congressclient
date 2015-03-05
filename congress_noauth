@@ -1,0 +1,7 @@
+#!/bin/bash
+
+CONGRESS_URL="http://127.0.0.1:1789"
+COMMAND_PREFIX="openstack --os-token foo --os-url $CONGRESS_URL congress"
+
+CMD="$COMMAND_PREFIX $@"
+exec $CMD
