@@ -105,7 +105,7 @@ class TestCreatePolicyRule(common.TestCongressBase):
     def test_create_policy_rule(self):
         policy_name = 'classification'
         rule = "p(x) :- q(x)"
-        response = {"comment": "None",
+        response = {"comment": "Comment",
                     "id": "e531f2b3-3d97-42c0-b3b5-b7b6ab532018",
                     "rule": rule}
 
@@ -121,7 +121,7 @@ class TestCreatePolicyRule(common.TestCongressBase):
         parsed_args = self.check_parser(cmd, arglist, verifylist)
         result = list(cmd.take_action(parsed_args))
         filtered = [('comment', 'id', 'rule'),
-                    ('None', 'e531f2b3-3d97-42c0-b3b5-b7b6ab532018', rule)]
+                    ('Comment', 'e531f2b3-3d97-42c0-b3b5-b7b6ab532018', rule)]
         self.assertEqual(filtered, result)
 
     def test_create_policy_rule_with_name(self):
