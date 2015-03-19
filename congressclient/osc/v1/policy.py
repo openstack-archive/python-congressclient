@@ -72,6 +72,9 @@ class CreatePolicyRule(show.ShowOne):
         parser.add_argument(
             '--name', dest="rule_name",
             help="Name of the policy rule")
+        parser.add_argument(
+            '--comment', dest="comment",
+            help="Comment about policy rule")
         return parser
 
     def take_action(self, parsed_args):
@@ -80,6 +83,8 @@ class CreatePolicyRule(show.ShowOne):
         body = {'rule': parsed_args.rule}
         if parsed_args.rule_name:
             body['name'] = parsed_args.rule_name
+        if parsed_args.comment:
+            body['comment'] = parsed_args.comment
         data = client.create_policy_rule(parsed_args.policy_name, body)
         return zip(*sorted(six.iteritems(data)))
 
