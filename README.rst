@@ -25,14 +25,14 @@ To execute CLI commands to standalone congress set with noauth:
     $ python setup.py install
 
 
-* Edit congress_noauth and fix CONGRESS_URL to point to correct congress server
-
-* Run script "congress_noauth" to execute CLI commands::
+* To execute CLI commands::
 
     $ cd python-congressclient
 
     For example:
-    $ ./congress_noauth policy create test_policy
+    $ export CONGRESS_URL="http://127.0.0.1:1789"
+    $ openstack --os-token foo --os-url $CONGRESS_URL
+    (openstack) congress policy create test_policy
     +--------------+--------------------------------------+
     | Field        | Value                                |
     +--------------+--------------------------------------+
@@ -44,7 +44,7 @@ To execute CLI commands to standalone congress set with noauth:
     | owner_id     | user                                 |
     +--------------+--------------------------------------+
 
-    $ ./congress_noauth policy rule create test_policy "p(5)"
+    (openstack) congress policy rule create test_policy "p(5)"
     +---------+--------------------------------------+
     | Field   | Value                                |
     +---------+--------------------------------------+
@@ -54,11 +54,13 @@ To execute CLI commands to standalone congress set with noauth:
     | rule    | p(5)                                 |
     +---------+--------------------------------------+
 
-    $ ./congress_noauth policy rule list test_policy
+    (openstack) congress policy rule list test_policy
     // ID: 5ce7fb18-a227-447e-bec8-93e99c0052a5
     // Name: None
     p(5)
 
+    (openstack) exit
+    $
 
 Features
 --------
