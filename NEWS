@@ -1,3 +1,17 @@
+1.0.3 - 2015-03-30
+------------------
+
+    - Add new CLI commands to manage datasources/drivers
+         - congress datasource create  Create a datasource.
+         - congress datasource delete  Delete a datasource.
+         - congress driver config show  List driver tables.
+         - congress driver list  List drivers.
+         - congress driver schema show  List datasource tables.
+    - All api commands now use uuids instead of names and the cli
+      now looks up their ids when needed thou allows the user to still use
+      the name for convenience.
+
+
 1.0.2 - 2015-01-15
 ------------------
     - Add new CLI comment to create/delete policy
