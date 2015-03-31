@@ -264,3 +264,23 @@ class TestDeleteDatasourceDriver(common.TestCongressBase):
             result = cmd.take_action(parsed_args)
         mocker.assert_called_with("id")
         self.assertEqual(None, result)
+
+
+class TestDatasourceRequestRefresh(common.TestCongressBase):
+
+    def test_datasource_request_refresh(self):
+        driver = 'neutronv2'
+
+        arglist = [driver]
+        verifylist = [('datasource', driver), ]
+
+        mocker = mock.Mock(return_value=None)
+        self.app.client_manager.congressclient.request_refresh = mocker
+        self.app.client_manager.congressclient.list_datasources = mock.Mock()
+        cmd = datasource.DatasourceRequestRefresh(self.app, self.namespace)
+        parsed_args = self.check_parser(cmd, arglist, verifylist)
+        with mock.patch.object(utils, "get_resource_id_from_name",
+                               return_value="id"):
+            result = cmd.take_action(parsed_args)
+        mocker.assert_called_with("id", {})
+        self.assertEqual(None, result)

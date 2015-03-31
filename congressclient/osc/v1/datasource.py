@@ -279,3 +279,25 @@ class DeleteDatasource(command.Command):
         datasource_id = utils.get_resource_id_from_name(
             parsed_args.datasource, results)
         client.delete_datasource(datasource_id)
+
+
+class DatasourceRequestRefresh(command.Command):
+    """Trigger a datasource to poll."""
+
+    log = logging.getLogger(__name__ + '.DatasourceRequestRefresh')
+
+    def get_parser(self, prog_name):
+        parser = super(DatasourceRequestRefresh, self).get_parser(prog_name)
+        parser.add_argument(
+            'datasource',
+            metavar="<datasource-name>",
+            help="Name of the datasource to poll")
+        return parser
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)' % parsed_args)
+        client = self.app.client_manager.congressclient
+        results = client.list_datasources()
+        datasource_id = utils.get_resource_id_from_name(
+            parsed_args.datasource, results)
+        client.request_refresh(datasource_id, {})
