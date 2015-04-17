@@ -149,8 +149,11 @@ class ShowDatasourceTableSchema(lister.Lister):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         client = self.app.client_manager.congressclient
+        results = client.list_datasources()
+        datasource_id = utils.get_resource_id_from_name(
+            parsed_args.datasource_name, results)
         data = client.show_datasource_table_schema(
-            parsed_args.datasource_name,
+            datasource_id,
             parsed_args.table_name)
         columns = ['name', 'description']
         return (columns,
