@@ -167,6 +167,12 @@ class Client(object):
             self.datasource_path % datasource)
         return body
 
+    def execute_datasource_action(self, service_name, action, body):
+        uri = "?action=%s" % (action)
+        resp, body = self.httpclient.post(
+            (self.datasource_path % service_name) + str(uri), body=body)
+        return body
+
     def list_drivers(self):
         resp, body = self.httpclient.get(self.driver)
         return body
