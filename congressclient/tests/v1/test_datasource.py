@@ -156,9 +156,11 @@ class TestShowDatasourceTableSchema(common.TestCongressBase):
         cmd = datasource.ShowDatasourceTableSchema(self.app, self.namespace)
 
         parsed_args = self.check_parser(cmd, arglist, verifylist)
-        result = cmd.take_action(parsed_args)
+        with mock.patch.object(utils, "get_resource_id_from_name",
+                               return_value="id"):
+            result = cmd.take_action(parsed_args)
 
-        lister.assert_called_with(datasource_name, table_name)
+        lister.assert_called_with("id", table_name)
         self.assertEqual(['name', 'description'], result[0])
 
 
