@@ -1,0 +1,10 @@
+Verified+2: Jenkins
+Code-Review+2: Tim Hinrichs <timothy.l.hinrichs@gmail.com>
+Workflow+1: Tim Hinrichs <timothy.l.hinrichs@gmail.com>
+Code-Review+1: Peter Balland <peter@balland.net>
+Verified+1: VMWare Congress CI <congressci@gmail.com>
+Submitted-by: Jenkins
+Submitted-at: Mon, 27 Apr 2015 16:58:39 +0000
+Reviewed-on: https://review.openstack.org/169516
+Project: openstack/python-congressclient
+Branch: refs/heads/master
