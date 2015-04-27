@@ -181,3 +181,9 @@ class Client(object):
         resp, body = self.httpclient.get(self.driver_path %
                                          (driver))
         return body
+
+    def request_refresh(self, driver, body=None):
+        resp, body = self.httpclient.post(self.datasource_path %
+                                          (driver) + "?action=request-refresh",
+                                          body=body)
+        return body
