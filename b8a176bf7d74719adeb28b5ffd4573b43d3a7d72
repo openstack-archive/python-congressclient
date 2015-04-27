@@ -1,0 +1,9 @@
+Verified+2: Jenkins
+Code-Review+2: Tim Hinrichs <timothy.l.hinrichs@gmail.com>
+Workflow+1: Tim Hinrichs <timothy.l.hinrichs@gmail.com>
+Code-Review+1: Masahito Muroi <muroi.masahito@lab.ntt.co.jp>
+Submitted-by: Jenkins
+Submitted-at: Mon, 27 Apr 2015 16:58:56 +0000
+Reviewed-on: https://review.openstack.org/177119
+Project: openstack/python-congressclient
+Branch: refs/heads/master
