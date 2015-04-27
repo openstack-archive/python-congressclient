@@ -6,7 +6,7 @@ Client for Congress
 
 * Free software: Apache license
 * Documentation: http://docs.openstack.org/developer/python-congressclient
-* Source: http://git.openstack.org/cgit/stackforge/python-congressclient
+* Source: http://git.openstack.org/cgit/openstack/python-congressclient
 * Bugs: http://bugs.launchpad.net/python-congressclient
 
 
@@ -20,7 +20,7 @@ To execute CLI commands to standalone congress set with noauth:
 
 * Clone repository & install python-congressclient::
 
-    $ git clone https://github.com/stackforge/python-congressclient.git
+    $ git clone https://github.com/openstack/python-congressclient.git
     $ cd python-congressclient
     $ python setup.py install
 
