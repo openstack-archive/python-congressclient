@@ -82,7 +82,6 @@ class TestListDatasourceStatus(common.TestCongressBase):
         ]
         response = {'last_updated': "now",
                     'last_error': "None"}
-
         lister = mock.Mock(return_value=response)
         self.app.client_manager.congressclient.list_datasource_status = lister
         self.app.client_manager.congressclient.list_datasources = mock.Mock()
@@ -201,6 +200,32 @@ class TestListDatasourceRows(common.TestCongressBase):
 
         lister.assert_called_with('id', table_name)
         self.assertEqual(['ID', 'name'], result[0])
+
+
+class TestShowDatasourceTable(common.TestCongressBase):
+    def test_show_datasource_table(self):
+        datasource_name = 'neutron'
+        table_id = 'ports'
+        arglist = [
+            datasource_name, table_id
+        ]
+        verifylist = [
+            ('datasource_name', datasource_name),
+            ('table_id', table_id)
+        ]
+        response = {
+            'id': 'ports',
+        }
+        lister = mock.Mock(return_value=response)
+        client = self.app.client_manager.congressclient
+        client.show_datasource_table = lister
+        cmd = datasource.ShowDatasourceTable(self.app, self.namespace)
+        expected_ret = [('id',), ('ports',)]
+
+        parsed_args = self.check_parser(cmd, arglist, verifylist)
+        result = list(cmd.take_action(parsed_args))
+
+        self.assertEqual(expected_ret, result)
 
 
 class TestCreateDatasource(common.TestCongressBase):
