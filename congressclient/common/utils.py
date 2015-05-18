@@ -12,8 +12,8 @@
 #   License for the specific language governing permissions and limitations
 #   under the License.
 
+import importlib
 import os
-import sys
 
 from congressclient import exceptions
 
@@ -29,6 +29,17 @@ def env(*vars, **kwargs):
         if value:
             return value
     return kwargs.get('default', '')
+
+
+def import_class(import_str):
+    """Returns a class from a string including module and class
+
+    :param import_str: a string representation of the class name
+    :rtype: the requested class
+    """
+    mod_str, _sep, class_str = import_str.rpartition('.')
+    mod = importlib.import_module(mod_str)
+    return getattr(mod, class_str)
 
 
 def get_client_class(api_name, version, version_map):
@@ -47,17 +58,6 @@ def get_client_class(api_name, version, version_map):
         raise exceptions.UnsupportedVersion(msg)
 
     return import_class(client_path)
-
-
-def import_class(import_str):
-    """Returns a class from a string including module and class
-
-    :param import_str: a string representation of the class name
-    :rtype: the requested class
-    """
-    mod_str, _sep, class_str = import_str.rpartition('.')
-    __import__(mod_str)
-    return getattr(sys.modules[mod_str], class_str)
 
 
 def format_long_dict_list(data):
