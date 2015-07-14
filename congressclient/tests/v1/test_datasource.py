@@ -98,6 +98,37 @@ class TestListDatasourceStatus(common.TestCongressBase):
                          result)
 
 
+class TestShowDatasourceActions(common.TestCongressBase):
+    def test_show_datasource_actions(self):
+        datasource_name = 'fake'
+        arglist = [
+            datasource_name
+        ]
+        verifylist = [
+            ('datasource_name', datasource_name)
+        ]
+        response = {
+            "results":
+                [{'name': 'execute',
+                  'args': [{"name": "name", "description": "None"},
+                           {"name": "status", "description": "None"},
+                           {"name": "id", "description": "None"}],
+                  'description': 'execute action'}]
+        }
+        lister = mock.Mock(return_value=response)
+        self.app.client_manager.congressclient.list_datasource_actions = lister
+        self.app.client_manager.congressclient.list_datasources = mock.Mock()
+        cmd = datasource.ShowDatasourceActions(self.app, self.namespace)
+
+        parsed_args = self.check_parser(cmd, arglist, verifylist)
+        with mock.patch.object(utils, "get_resource_id_from_name",
+                               return_value="id"):
+            result = cmd.take_action(parsed_args)
+
+        lister.assert_called_once_with("id")
+        self.assertEqual(['action', 'args', 'description'], result[0])
+
+
 class TestShowDatasourceSchema(common.TestCongressBase):
     def test_show_datasource_schema(self):
         datasource_name = 'neutron'
