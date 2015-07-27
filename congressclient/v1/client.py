@@ -55,6 +55,7 @@ class Client(object):
     datasource_rows = '/v1/data-sources/%s/tables/%s/rows'
     driver = '/v1/system/drivers'
     driver_path = '/v1/system/drivers/%s'
+    policy_api_versions = '/'
 
     def __init__(self, **kwargs):
         super(Client, self).__init__()
@@ -186,4 +187,8 @@ class Client(object):
         resp, body = self.httpclient.post(self.datasource_path %
                                           (driver) + "?action=request-refresh",
                                           body=body)
+        return body
+
+    def list_api_versions(self):
+        resp, body = self.httpclient.get(self.policy_api_versions)
         return body
