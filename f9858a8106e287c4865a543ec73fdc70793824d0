@@ -1,0 +1,10 @@
+Verified+2: Jenkins
+Code-Review+1: Masahito Muroi <muroi.masahito@lab.ntt.co.jp>
+Code-Review+2: Peter Balland <peter@balland.net>
+Workflow+1: Peter Balland <peter@balland.net>
+Code-Review+1: Zhenzan Zhou <zhenzan.zhou@intel.com>
+Submitted-by: Jenkins
+Submitted-at: Wed, 29 Jul 2015 00:02:35 +0000
+Reviewed-on: https://review.openstack.org/205920
+Project: openstack/python-congressclient
+Branch: refs/heads/master
