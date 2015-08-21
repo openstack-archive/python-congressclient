@@ -18,7 +18,7 @@ from congressclient.common import utils
 
 LOG = logging.getLogger(__name__)
 
-DEFAULT_COMPUTE_API_VERSION = '1'
+DEFAULT_POLICY_API_VERSION = '1'
 API_VERSION_OPTION = 'os_policy_api_version'
 API_NAME = 'congressclient'
 API_VERSIONS = {
@@ -47,8 +47,7 @@ def build_option_parser(parser):
         metavar='<policy-api-version>',
         default=utils.env(
             'OS_POLICY_API_VERSION',
-            default=DEFAULT_COMPUTE_API_VERSION),
-        help='Policy API version, default=' +
-             DEFAULT_COMPUTE_API_VERSION +
-             ' (Env: OS_POLICY_API_VERSION)')
+            default=DEFAULT_POLICY_API_VERSION),
+        help=('Policy API version, default=%s (Env: OS_POLICY_API_VERSION)' %
+              DEFAULT_POLICY_API_VERSION))
     return parser
