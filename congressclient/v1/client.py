@@ -42,7 +42,6 @@ class Client(object):
     policy_table_path = '/v1/policies/%s/tables/%s'
     policy_rows = '/v1/policies/%s/tables/%s/rows'
     policy_rows_trace = '/v1/policies/%s/tables/%s/rows?trace=True'
-    policy_rules = '/v1/policies/%s/rules'
     policies = '/v1/policies'
     policy_action = '/v1/policies/%s?%s'
     datasources = '/v1/data-sources'
@@ -50,6 +49,7 @@ class Client(object):
     datasource_tables = '/v1/data-sources/%s/tables'
     datasource_table_path = '/v1/data-sources/%s/tables/%s'
     datasource_status = '/v1/data-sources/%s/status'
+    datasource_actions = '/v1/data-sources/%s/actions'
     datasource_schema = '/v1/data-sources/%s/schema'
     datasource_table_schema = '/v1/data-sources/%s/tables/%s/spec'
     datasource_rows = '/v1/data-sources/%s/tables/%s/rows'
@@ -140,6 +140,11 @@ class Client(object):
 
     def list_datasource_status(self, datasource_name):
         resp, body = self.httpclient.get(self.datasource_status %
+                                         datasource_name)
+        return body
+
+    def list_datasource_actions(self, datasource_name):
+        resp, body = self.httpclient.get(self.datasource_actions %
                                          datasource_name)
         return body
 

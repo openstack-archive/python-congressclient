@@ -98,6 +98,44 @@ class ShowDatasourceStatus(show.ShowOne):
         return zip(*sorted(six.iteritems(data)))
 
 
+class ShowDatasourceActions(lister.Lister):
+    """List supported actions for datasource."""
+
+    log = logging.getLogger(__name__ + '.ShowDatasourceActions')
+
+    def get_parser(self, prog_name):
+        parser = super(ShowDatasourceActions, self).get_parser(prog_name)
+        parser.add_argument(
+            'datasource_name',
+            metavar="<datasource-name>",
+            help="Name of the datasource")
+        return parser
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)' % parsed_args)
+        # as we know output it's long, limit column length here
+        if parsed_args.max_width == 0:
+            parsed_args.max_width = 40
+
+        client = self.app.client_manager.congressclient
+
+        results = client.list_datasources()
+        datasource_id = utils.get_resource_id_from_name(
+            parsed_args.datasource_name, results)
+
+        data = client.list_datasource_actions(datasource_id)
+        formatters = {'args': utils.format_long_dict_list}
+        newdata = [{'action': x['name'],
+                    'args': x['args'],
+                    'description': x['description']}
+                   for x in data['results']]
+        columns = ['action', 'args', 'description']
+        return (columns, (utils.get_dict_properties(s,
+                                                    columns,
+                                                    formatters=formatters)
+                for s in newdata))
+
+
 class ShowDatasourceSchema(lister.Lister):
     """Show schema for datasource."""
 
