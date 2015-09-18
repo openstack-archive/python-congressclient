@@ -14,17 +14,17 @@
 
 """Policy action implemenations"""
 
-import logging
 import sys
 
 from cliff import command
 from cliff import lister
 from cliff import show
 from keystoneclient import exceptions
+from oslo_log import log as logging
+from oslo_serialization import jsonutils
 import six
 
 from congressclient.common import utils
-from congressclient.openstack.common import jsonutils
 
 
 def _format_rule(rule):

@@ -26,12 +26,12 @@ Base utilities to build API operation managers and objects on top of.
 import abc
 import copy
 
+from oslo_utils import strutils
 import six
 from six.moves.urllib import parse
 
 from congressclient.openstack.common.apiclient import exceptions
 from congressclient.openstack.common.gettextutils import _
-from congressclient.openstack.common import strutils
 
 
 def getid(obj):

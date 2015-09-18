@@ -15,9 +15,8 @@
 
 """List API versions implemenations"""
 
-import logging
-
 from cliff import lister
+from oslo_log import log as logging
 
 from congressclient.common import utils
 

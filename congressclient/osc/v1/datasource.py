@@ -14,11 +14,10 @@
 
 """Datasource action implemenations"""
 
-import logging
-
 from cliff import command
 from cliff import lister
 from cliff import show
+from oslo_log import log as logging
 import six
 
 from congressclient.common import parseractions

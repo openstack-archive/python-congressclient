@@ -28,6 +28,8 @@ OpenStack Client interface. Handles the REST calls and responses.
 import logging
 import time
 
+from oslo_utils import importutils
+
 try:
     import simplejson as json
 except ImportError:
@@ -37,7 +39,6 @@ import requests
 
 from congressclient.openstack.common.apiclient import exceptions
 from congressclient.openstack.common.gettextutils import _
-from congressclient.openstack.common import importutils
 
 
 _logger = logging.getLogger(__name__)
