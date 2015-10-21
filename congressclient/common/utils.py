@@ -71,6 +71,15 @@ def format_long_dict_list(data):
     return ',\n'.join(newdata) + '\n'
 
 
+def format_dict(data):
+    """Return a formatted string.
+
+    :param data: a dict
+    :rtype: a string formatted to {a:b, c:d}
+    """
+    return str({str(key): str(value) for key, value in data.items()})
+
+
 def format_list(data):
     """Return a formatted strings
 

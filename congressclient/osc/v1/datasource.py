@@ -38,7 +38,7 @@ class ListDatasources(lister.Lister):
         client = self.app.client_manager.congressclient
         data = client.list_datasources()['results']
         columns = ['id', 'name', 'enabled', 'type', 'config']
-        formatters = {'Datasources': utils.format_list}
+        formatters = {'config': utils.format_dict}
         return (columns,
                 (utils.get_dict_properties(s, columns,
                                            formatters=formatters)
