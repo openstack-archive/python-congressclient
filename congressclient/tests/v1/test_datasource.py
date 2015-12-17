@@ -321,7 +321,7 @@ class TestDeleteDatasourceDriver(common.TestCongressBase):
                                return_value="id"):
             result = cmd.take_action(parsed_args)
         mocker.assert_called_with("id")
-        self.assertEqual(None, result)
+        self.assertIsNone(result)
 
 
 class TestDatasourceRequestRefresh(common.TestCongressBase):
@@ -341,4 +341,4 @@ class TestDatasourceRequestRefresh(common.TestCongressBase):
                                return_value="id"):
             result = cmd.take_action(parsed_args)
         mocker.assert_called_with("id", {})
-        self.assertEqual(None, result)
+        self.assertIsNone(result)
