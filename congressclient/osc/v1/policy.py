@@ -271,7 +271,9 @@ class CreatePolicy(show.ShowOne):
         parser.add_argument(
             '--abbreviation',
             metavar="<abbreviation>",
-            help="Policy abbreviation (used in traces)")
+            help="Policy abbreviation (used in traces). The length of the "
+                 "string must be equal to or less than 5 characters. Defaults "
+                 "to the first five characters of policy_name if not set.")
         parser.add_argument(
             '--kind',
             metavar="<kind>",
