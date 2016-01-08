@@ -43,6 +43,37 @@ class TestListDatasources(common.TestCongressBase):
         self.assertEqual(['id', 'name', 'enabled', 'type', 'config'],
                          result[0])
 
+    def test_list_datasource_output_not_unicode(self):
+        # response json string is converted to dict by oslo jsonutils.loads(),
+        # so the key and value in the dict should be unicode type.
+        response = {
+            u"results": [{u"id": u"neutron",
+                          u"name": u"my_name",
+                          u"enabled": True,
+                          u"type": None,
+                          u"config": {
+                              u'username': u'admin',
+                              u'tenant_name': u'admin',
+                              u'poll_time': u'10',
+                              u'password': u'<hidden>',
+                              u'auth_url': u'http://127.0.0.1:5000/v2.0'
+                          }}]
+        }
+        lister = mock.Mock(return_value=response)
+        self.app.client_manager.congressclient.list_datasources = lister
+        cmd = datasource.ListDatasources(self.app, self.namespace)
+
+        parsed_args = self.check_parser(cmd, [], [])
+        result = cmd.take_action(parsed_args)
+
+        lister.assert_called_with()
+        self.assertEqual(['id', 'name', 'enabled', 'type', 'config'],
+                         result[0])
+        # get 'config' column
+        config = list(result[1])[0][-1]
+        self.assertIn("'username': 'admin'", config)
+        self.assertNotIn("u'username': u'admin'", config)
+
 
 class TestListDatasourceTables(common.TestCongressBase):
     def test_list_datasource_tables(self):
