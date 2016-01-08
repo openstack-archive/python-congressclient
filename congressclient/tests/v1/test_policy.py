@@ -97,7 +97,7 @@ class TestDeletePolicy(common.TestCongressBase):
             result = cmd.take_action(parsed_args)
 
         mocker.assert_called_with(policy_id)
-        self.assertEqual(None, result)
+        self.assertIsNone(result)
 
 
 class TestCreatePolicyRule(common.TestCongressBase):
@@ -173,7 +173,7 @@ class TestDeletePolicyRule(common.TestCongressBase):
             result = cmd.take_action(parsed_args)
 
         mocker.assert_called_with(policy_name, rule_id)
-        self.assertEqual(None, result)
+        self.assertIsNone(result)
 
 
 class TestListPolicyRules(common.TestCongressBase):
