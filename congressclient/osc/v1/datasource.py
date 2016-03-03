@@ -53,8 +53,8 @@ class ListDatasourceTables(lister.Lister):
         parser = super(ListDatasourceTables, self).get_parser(prog_name)
         parser.add_argument(
             'datasource_name',
-            metavar="<datasource-name>",
-            help="Name of the datasource")
+            metavar="<datasource>",
+            help="Name or ID of the datasource")
         return parser
 
     def take_action(self, parsed_args):
@@ -81,8 +81,8 @@ class ShowDatasourceStatus(show.ShowOne):
         parser = super(ShowDatasourceStatus, self).get_parser(prog_name)
         parser.add_argument(
             'datasource_name',
-            metavar="<datasource-name>",
-            help="Name of the datasource")
+            metavar="<datasource>",
+            help="Name or ID of the datasource")
         return parser
 
     def take_action(self, parsed_args):
@@ -106,8 +106,8 @@ class ShowDatasourceActions(lister.Lister):
         parser = super(ShowDatasourceActions, self).get_parser(prog_name)
         parser.add_argument(
             'datasource_name',
-            metavar="<datasource-name>",
-            help="Name of the datasource")
+            metavar="<datasource>",
+            help="Name or ID of the datasource")
         return parser
 
     def take_action(self, parsed_args):
@@ -144,8 +144,8 @@ class ShowDatasourceSchema(lister.Lister):
         parser = super(ShowDatasourceSchema, self).get_parser(prog_name)
         parser.add_argument(
             'datasource_name',
-            metavar="<datasource-name>",
-            help="Name of the datasource")
+            metavar="<datasource>",
+            help="Name or ID of the datasource")
         return parser
 
     def take_action(self, parsed_args):
@@ -175,8 +175,8 @@ class ShowDatasourceTableSchema(lister.Lister):
         parser = super(ShowDatasourceTableSchema, self).get_parser(prog_name)
         parser.add_argument(
             'datasource_name',
-            metavar="<datasource-name>",
-            help="Name of the datasource")
+            metavar="<datasource>",
+            help="Name or ID of the datasource")
         parser.add_argument(
             'table_name',
             metavar="<table-name>",
@@ -207,8 +207,8 @@ class ListDatasourceRows(lister.Lister):
         parser = super(ListDatasourceRows, self).get_parser(prog_name)
         parser.add_argument(
             'datasource_name',
-            metavar="<datasource-name>",
-            help="Name of the datasource to show")
+            metavar="<datasource>",
+            help="Name or ID of the datasource to show")
         parser.add_argument(
             'table',
             metavar="<table>",
@@ -242,8 +242,8 @@ class ShowDatasourceTable(show.ShowOne):
         parser = super(ShowDatasourceTable, self).get_parser(prog_name)
         parser.add_argument(
             'datasource_name',
-            metavar='<datasource-name>',
-            help="Name of datasource")
+            metavar='<datasource>',
+            help="Name or ID of datasource")
         parser.add_argument(
             'table_id',
             metavar='<table-id>',
@@ -308,8 +308,8 @@ class DeleteDatasource(command.Command):
         parser = super(DeleteDatasource, self).get_parser(prog_name)
         parser.add_argument(
             'datasource',
-            metavar="<datasource-name>",
-            help="Name of the datasource to delete")
+            metavar="<datasource>",
+            help="Name or ID of the datasource to delete")
         return parser
 
     def take_action(self, parsed_args):
@@ -330,8 +330,8 @@ class DatasourceRequestRefresh(command.Command):
         parser = super(DatasourceRequestRefresh, self).get_parser(prog_name)
         parser.add_argument(
             'datasource',
-            metavar="<datasource-name>",
-            help="Name of the datasource to poll")
+            metavar="<datasource>",
+            help="Name or ID of the datasource to poll")
         return parser
 
     def take_action(self, parsed_args):
