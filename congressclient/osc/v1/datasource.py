@@ -36,7 +36,8 @@ class ListDatasources(lister.Lister):
     def take_action(self, parsed_args):
         client = self.app.client_manager.congressclient
         data = client.list_datasources()['results']
-        columns = ['id', 'name', 'enabled', 'type', 'config']
+        # Type is always None, so disabling it for now.
+        columns = ['id', 'name', 'enabled', 'driver', 'config']
         formatters = {'config': utils.format_dict}
         return (columns,
                 (utils.get_dict_properties(s, columns,
