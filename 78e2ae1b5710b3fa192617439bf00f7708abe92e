@@ -1,0 +1,8 @@
+Code-Review+2: Tim Hinrichs <timothy.l.hinrichs@gmail.com>
+Workflow+1: Tim Hinrichs <timothy.l.hinrichs@gmail.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Tue, 19 Apr 2016 22:19:04 +0000
+Reviewed-on: https://review.openstack.org/307289
+Project: openstack/python-congressclient
+Branch: refs/heads/stable/mitaka
