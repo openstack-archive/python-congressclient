@@ -30,7 +30,7 @@ class TestListDatasources(common.TestCongressBase):
                          "name": "my_name",
                          "enabled": "True",
                          "driver": "driver1",
-                         "config": "None"}]
+                         "config": None}]
         }
         lister = mock.Mock(return_value=response)
         self.app.client_manager.congressclient.list_datasources = lister
@@ -42,6 +42,12 @@ class TestListDatasources(common.TestCongressBase):
         lister.assert_called_with()
         self.assertEqual(['id', 'name', 'enabled', 'driver', 'config'],
                          result[0])
+        for row in result[1]:
+            self.assertEqual(datasource_name, row[0])
+            self.assertEqual("my_name", row[1])
+            self.assertEqual("True", row[2])
+            self.assertEqual("driver1", row[3])
+            self.assertEqual("None", row[4])
 
     def test_list_datasource_output_not_unicode(self):
         # response json string is converted to dict by oslo jsonutils.loads(),

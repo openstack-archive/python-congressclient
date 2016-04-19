@@ -77,6 +77,8 @@ def format_dict(data):
     :param data: a dict
     :rtype: a string formatted to {a:b, c:d}
     """
+    if not isinstance(data, dict):
+        return str(data)
     return str({str(key): str(value) for key, value in data.items()})
 
 
