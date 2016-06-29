@@ -19,7 +19,7 @@ import sys
 from cliff import command
 from cliff import lister
 from cliff import show
-from keystoneclient import exceptions
+from keystoneauth1 import exceptions
 from oslo_log import log as logging
 from oslo_serialization import jsonutils
 import six

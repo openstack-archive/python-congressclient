@@ -12,20 +12,20 @@
 #   License for the specific language governing permissions and limitations
 #   under the License.
 
-from keystoneclient import adapter
+from keystoneauth1 import adapter
 
 
 class Client(object):
     """Client for the Congress v1 API.
 
     Example::
-        import keystoneclient
+        from keystoneauth1.identity import v2
+        from keystoneauth1 import session
         from congressclient.v1 import client
-        auth = keystoneclient.auth.identity.v2.Password(
-            auth_url=AUTH_URL, username=USERNAME,
-            password=PASSWORD, tenant_name=TENANT_NAME)
-        session = keystoneclient.session.Session(auth=auth)
-        congress = client.Client(session=session,
+        auth = v2.Password(auth_url=AUTH_URL, username=USERNAME,
+                           password=PASSWORD, tenant_name=TENANT_NAME)
+        sess = session.Session(auth=auth)
+        congress = client.Client(session=sess,
                                  auth=None,
                                  interface='publicURL',
                                  service_type='policy',
@@ -33,7 +33,6 @@ class Client(object):
         congress.create_policy_rule(..)
 
     """
-
     policy = '/v1/policies'
     policy_path = '/v1/policies/%s'
     policy_rules = '/v1/policies/%s/rules'
