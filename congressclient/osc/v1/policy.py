@@ -204,7 +204,7 @@ class SimulatePolicy(command.Command):
         for result in results['result']:
             print(result)
         if 'trace' in results:
-            print (results['trace'])
+            print(results['trace'])
         return 0
 
 
