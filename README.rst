@@ -24,7 +24,16 @@ To execute CLI commands to standalone congress set with noauth:
     $ cd python-congressclient
     $ python setup.py install
 
+* Read the HTML documentation::
+  Install python-sphinx and the oslosphinx extension if missing.
+  $ sudo pip install sphinx
+  $ sudo pip install oslosphinx
 
+  Build the docs
+  $ make docs
+
+  Open doc/html/index.html in a browser
+  
 * To execute CLI commands::
 
     $ cd python-congressclient
