@@ -138,6 +138,19 @@ class Client(object):
                                          (datasource_name, table_name))
         return body
 
+    def update_datasource_rows(self, datasource_name, table_name, body=None):
+        """Update rows in a table of a datasource.
+
+        Args:
+            datasource_name: Name or id of the datasource
+            table_name: Table name for updating
+            body: Rows for update.
+        """
+        resp, body = self.httpclient.put(self.datasource_rows %
+                                         (datasource_name, table_name),
+                                         body=body)
+        return body
+
     def list_datasource_status(self, datasource_name):
         resp, body = self.httpclient.get(self.datasource_status %
                                          datasource_name)
