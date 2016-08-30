@@ -18,6 +18,7 @@ from cliff import command
 from cliff import lister
 from cliff import show
 from oslo_log import log as logging
+from oslo_serialization import jsonutils
 import six
 
 from congressclient.common import parseractions
@@ -320,6 +321,37 @@ class DeleteDatasource(command.Command):
         datasource_id = utils.get_resource_id_from_name(
             parsed_args.datasource, results)
         client.delete_datasource(datasource_id)
+
+
+class UpdateDatasourceRow(command.Command):
+    """Update rows to a datasource table."""
+
+    log = logging.getLogger(__name__ + '.UpdateDatasourceRow')
+
+    def get_parser(self, prog_name):
+        parser = super(UpdateDatasourceRow, self).get_parser(prog_name)
+        parser.add_argument(
+            'datasource',
+            metavar="<datasource>",
+            help="Name or ID of the datasource to Update")
+        parser.add_argument(
+            'table',
+            metavar="<table>",
+            help="Name or ID of the table to Update")
+        parser.add_argument(
+            'rows',
+            type=jsonutils.loads,
+            metavar="<rows>",
+            help=("List of Rows should be formmated json style."
+                  " ex. [[row1], [row2]]"))
+        return parser
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)' % parsed_args)
+        client = self.app.client_manager.congressclient
+        body = parsed_args.rows
+        client.update_datasource_rows(
+            parsed_args.datasource, parsed_args.table, body)
 
 
 class DatasourceRequestRefresh(command.Command):

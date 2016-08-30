@@ -12,6 +12,7 @@
 #
 
 import mock
+from oslo_serialization import jsonutils
 
 from congressclient.common import utils
 from congressclient.osc.v1 import datasource
@@ -359,6 +360,31 @@ class TestDeleteDatasourceDriver(common.TestCongressBase):
             result = cmd.take_action(parsed_args)
         mocker.assert_called_with("id")
         self.assertIsNone(result)
+
+
+class TestUpdateDatasourceRow(common.TestCongressBase):
+
+    def test_update_datasource_row(self):
+        driver = 'push'
+        table_name = 'table'
+        rows = [["data1", "data2"],
+                ["data3", "data4"]]
+
+        arglist = [driver, table_name, jsonutils.dumps(rows)]
+        verifylist = [('datasource', driver),
+                      ('table', table_name),
+                      ('rows', rows)]
+
+        mocker = mock.Mock(return_value=None)
+        self.app.client_manager.congressclient.update_datasource_rows = mocker
+        self.app.client_manager.congressclient.list_datasources = mock.Mock()
+
+        cmd = datasource.UpdateDatasourceRow(self.app, self.namespace)
+        parsed_args = self.check_parser(cmd, arglist, verifylist)
+        with mock.patch.object(utils, 'get_resource_id_from_name',
+                               return_value="push"):
+            cmd.take_action(parsed_args)
+        mocker.assert_called_with(driver, table_name, rows)
 
 
 class TestDatasourceRequestRefresh(common.TestCongressBase):
