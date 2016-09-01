@@ -1,0 +1,8 @@
+---
+features:
+  - Now supports 'datasource row update' for those
+    datasource drivers that allow you to push data
+    into them over HTTP.
+issues:
+  - The 'datasource row update' command sometimes returns
+    unfriendly error messages.
