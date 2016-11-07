@@ -133,7 +133,7 @@ def get_resource_id_from_name(name, results):
         # NOTE(arosen): this should only occur is using congress
         # as admin and multiple tenants use the same datsource name.
         raise exceptions.Conflict(
-            "Multiple resources have this name %s. Delete by id." % name)
+            "Multiple resources have this name %s. Please specify id." % name)
     if id_match:
         return id_match
 
