@@ -127,6 +127,15 @@ class Client(object):
         resp, body = self.httpclient.get(self.datasources)
         return body
 
+    def show_datasource(self, datasource_name):
+        """Get a single datasource
+
+        Intended for use by Horizon. Not available in CLI
+        """
+        resp, body = self.httpclient.get(self.datasource_path %
+                                         (datasource_name))
+        return body
+
     def list_datasource_tables(self, datasource_name):
         resp, body = self.httpclient.get(self.datasource_tables %
                                          (datasource_name))
