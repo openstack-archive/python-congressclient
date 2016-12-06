@@ -96,16 +96,13 @@ class TestListDatasourceTables(common.TestCongressBase):
                         {"id": "networks"}]
         }
         lister = mock.Mock(return_value=response)
-        self.app.client_manager.congressclient.list_datasources = mock.Mock()
         self.app.client_manager.congressclient.list_datasource_tables = lister
         cmd = datasource.ListDatasourceTables(self.app, self.namespace)
 
         parsed_args = self.check_parser(cmd, arglist, verifylist)
 
-        with mock.patch.object(utils, "get_resource_id_from_name",
-                               return_value="id"):
-            result = cmd.take_action(parsed_args)
-        lister.assert_called_with("id")
+        result = cmd.take_action(parsed_args)
+        lister.assert_called_with(datasource_name)
         self.assertEqual(['id'], result[0])
 
 
@@ -122,15 +119,12 @@ class TestListDatasourceStatus(common.TestCongressBase):
                     'last_error': "None"}
         lister = mock.Mock(return_value=response)
         self.app.client_manager.congressclient.list_datasource_status = lister
-        self.app.client_manager.congressclient.list_datasources = mock.Mock()
         cmd = datasource.ShowDatasourceStatus(self.app, self.namespace)
 
         parsed_args = self.check_parser(cmd, arglist, verifylist)
-        with mock.patch.object(utils, "get_resource_id_from_name",
-                               return_value="id"):
-            result = list(cmd.take_action(parsed_args))
+        result = list(cmd.take_action(parsed_args))
 
-        lister.assert_called_with("id")
+        lister.assert_called_with(datasource_name)
         self.assertEqual([('last_error', 'last_updated'),
                           ('None', 'now')],
                          result)
@@ -155,15 +149,12 @@ class TestShowDatasourceActions(common.TestCongressBase):
         }
         lister = mock.Mock(return_value=response)
         self.app.client_manager.congressclient.list_datasource_actions = lister
-        self.app.client_manager.congressclient.list_datasources = mock.Mock()
         cmd = datasource.ShowDatasourceActions(self.app, self.namespace)
 
         parsed_args = self.check_parser(cmd, arglist, verifylist)
-        with mock.patch.object(utils, "get_resource_id_from_name",
-                               return_value="id"):
-            result = cmd.take_action(parsed_args)
+        result = cmd.take_action(parsed_args)
 
-        lister.assert_called_once_with("id")
+        lister.assert_called_once_with(datasource_name)
         self.assertEqual(['action', 'args', 'description'], result[0])
 
 
@@ -189,15 +180,12 @@ class TestShowDatasourceSchema(common.TestCongressBase):
         }
         lister = mock.Mock(return_value=response)
         self.app.client_manager.congressclient.show_datasource_schema = lister
-        self.app.client_manager.congressclient.list_datasources = mock.Mock()
         cmd = datasource.ShowDatasourceSchema(self.app, self.namespace)
 
         parsed_args = self.check_parser(cmd, arglist, verifylist)
-        with mock.patch.object(utils, "get_resource_id_from_name",
-                               return_value="id"):
-            result = cmd.take_action(parsed_args)
+        result = cmd.take_action(parsed_args)
 
-        lister.assert_called_with("id")
+        lister.assert_called_with(datasource_name)
         self.assertEqual(['table', 'columns'], result[0])
 
 
@@ -224,11 +212,9 @@ class TestShowDatasourceTableSchema(common.TestCongressBase):
         cmd = datasource.ShowDatasourceTableSchema(self.app, self.namespace)
 
         parsed_args = self.check_parser(cmd, arglist, verifylist)
-        with mock.patch.object(utils, "get_resource_id_from_name",
-                               return_value="id"):
-            result = cmd.take_action(parsed_args)
+        result = cmd.take_action(parsed_args)
 
-        lister.assert_called_with("id", table_name)
+        lister.assert_called_with(datasource_name, table_name)
         self.assertEqual(['name', 'description'], result[0])
 
 
@@ -256,18 +242,15 @@ class TestListDatasourceRows(common.TestCongressBase):
 
         client = self.app.client_manager.congressclient
         lister = mock.Mock(return_value=response)
-        self.app.client_manager.congressclient.list_datasources = mock.Mock()
         client.list_datasource_rows = lister
         schema_lister = mock.Mock(return_value=schema_response)
         client.show_datasource_table_schema = schema_lister
         cmd = datasource.ListDatasourceRows(self.app, self.namespace)
 
         parsed_args = self.check_parser(cmd, arglist, verifylist)
-        with mock.patch.object(utils, "get_resource_id_from_name",
-                               return_value="id"):
-            result = cmd.take_action(parsed_args)
+        result = cmd.take_action(parsed_args)
 
-        lister.assert_called_with('id', table_name)
+        lister.assert_called_with(datasource_name, table_name)
         self.assertEqual(['ID', 'name'], result[0])
 
 
@@ -352,13 +335,10 @@ class TestDeleteDatasourceDriver(common.TestCongressBase):
 
         mocker = mock.Mock(return_value=None)
         self.app.client_manager.congressclient.delete_datasource = mocker
-        self.app.client_manager.congressclient.list_datasources = mock.Mock()
         cmd = datasource.DeleteDatasource(self.app, self.namespace)
         parsed_args = self.check_parser(cmd, arglist, verifylist)
-        with mock.patch.object(utils, "get_resource_id_from_name",
-                               return_value="id"):
-            result = cmd.take_action(parsed_args)
-        mocker.assert_called_with("id")
+        result = cmd.take_action(parsed_args)
+        mocker.assert_called_with(driver)
         self.assertIsNone(result)
 
 
