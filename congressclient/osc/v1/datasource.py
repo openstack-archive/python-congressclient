@@ -62,10 +62,8 @@ class ListDatasourceTables(lister.Lister):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         client = self.app.client_manager.congressclient
-        results = client.list_datasources()
-        datasource_id = utils.get_resource_id_from_name(
-            parsed_args.datasource_name, results)
-        data = client.list_datasource_tables(datasource_id)['results']
+        name_or_id = parsed_args.datasource_name
+        data = client.list_datasource_tables(name_or_id)['results']
         columns = ['id']
         formatters = {'DatasourceTables': utils.format_list}
         return (columns,
@@ -90,11 +88,7 @@ class ShowDatasourceStatus(show.ShowOne):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         client = self.app.client_manager.congressclient
-
-        results = client.list_datasources()
-        datasource_id = utils.get_resource_id_from_name(
-            parsed_args.datasource_name, results)
-
+        datasource_id = parsed_args.datasource_name
         data = client.list_datasource_status(datasource_id)
         return zip(*sorted(six.iteritems(data)))
 
@@ -119,11 +113,7 @@ class ShowDatasourceActions(lister.Lister):
             parsed_args.max_width = 40
 
         client = self.app.client_manager.congressclient
-
-        results = client.list_datasources()
-        datasource_id = utils.get_resource_id_from_name(
-            parsed_args.datasource_name, results)
-
+        datasource_id = parsed_args.datasource_name
         data = client.list_datasource_actions(datasource_id)
         formatters = {'args': utils.format_long_dict_list}
         newdata = [{'action': x['name'],
@@ -153,9 +143,7 @@ class ShowDatasourceSchema(lister.Lister):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         client = self.app.client_manager.congressclient
-        results = client.list_datasources()
-        datasource_id = utils.get_resource_id_from_name(
-            parsed_args.datasource_name, results)
+        datasource_id = parsed_args.datasource_name
         data = client.show_datasource_schema(datasource_id)
         formatters = {'columns': utils.format_long_dict_list}
         newdata = [{'table': x['table_id'],
@@ -188,9 +176,7 @@ class ShowDatasourceTableSchema(lister.Lister):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         client = self.app.client_manager.congressclient
-        results = client.list_datasources()
-        datasource_id = utils.get_resource_id_from_name(
-            parsed_args.datasource_name, results)
+        datasource_id = parsed_args.datasource_name
         data = client.show_datasource_table_schema(
             datasource_id,
             parsed_args.table_name)
@@ -220,10 +206,7 @@ class ListDatasourceRows(lister.Lister):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         client = self.app.client_manager.congressclient
-
-        results = client.list_datasources()
-        datasource_id = utils.get_resource_id_from_name(
-            parsed_args.datasource_name, results)
+        datasource_id = parsed_args.datasource_name
         results = client.list_datasource_rows(datasource_id,
                                               parsed_args.table)['results']
         if results:
@@ -317,9 +300,7 @@ class DeleteDatasource(command.Command):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         client = self.app.client_manager.congressclient
-        results = client.list_datasources()
-        datasource_id = utils.get_resource_id_from_name(
-            parsed_args.datasource, results)
+        datasource_id = parsed_args.datasource
         client.delete_datasource(datasource_id)
 
 
