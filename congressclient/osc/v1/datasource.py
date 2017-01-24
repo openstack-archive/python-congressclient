@@ -300,8 +300,16 @@ class DeleteDatasource(command.Command):
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
         client = self.app.client_manager.congressclient
-        datasource_id = parsed_args.datasource
-        client.delete_datasource(datasource_id)
+        try:
+            datasource_id = parsed_args.datasource
+            client.delete_datasource(datasource_id)
+        except Exception:
+            # for backwards compatibility with pre-Ocata congress server,
+            # try old method of explicit conversion from name to UUID
+            results = client.list_datasources()
+            datasource_id = utils.get_resource_id_from_name(
+                parsed_args.datasource, results)
+            client.delete_datasource(datasource_id)
 
 
 class UpdateDatasourceRow(command.Command):
