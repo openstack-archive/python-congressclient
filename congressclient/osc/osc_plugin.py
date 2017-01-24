@@ -14,7 +14,7 @@
 
 """OpenStackClient plugin for Governance service."""
 
-import logging
+from oslo_log import log as logging
 
 from congressclient.common import utils
 
