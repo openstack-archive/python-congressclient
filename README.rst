@@ -21,20 +21,31 @@ Client for Congress
 
 Client for Standalone Congress
 ------------------------------
-To execute CLI commands to standalone congress set with noauth:
+Install the Congress CLI by cloning the repository and running the setup file.
+The master repository always contains the latest source code, so if you are 
+installing and testing a specific branch of Congress, clone the matching branch
+of the python-congressclient.
+
+To execute CLI commands to standalone Congress installed with noauth:
 
 * Install python-openstackclient::
 
     $ pip install python-openstackclient
 
-* Clone repository & install python-congressclient::
+* Clone master repository & install python-congressclient::
 
     $ git clone https://github.com/openstack/python-congressclient.git
     $ cd python-congressclient
     $ python setup.py install
+    
+* (Optional) Clone a branch; for example, if you are using the Ocata version of OpenStack and Congress::
 
-* Read the HTML documentation::
-  Install python-sphinx and the oslosphinx extension if missing.
+    $ git clone -b stable/ocata https://github.com/openstack/python-congressclient.git
+    $ cd python-congressclient
+    $ python setup.py install
+
+* Read the HTML documentation. Install python-sphinx and the oslosphinx extension if missing::
+  
   $ sudo pip install sphinx
   $ sudo pip install oslosphinx
 
