@@ -61,6 +61,9 @@ pygments_style = 'sphinx'
 # Output file base name for HTML help builder.
 htmlhelp_basename = '%sdoc' % project
 
+# A list of ignored prefixes for module index sorting.
+modindex_common_prefix = ['congressclient.']
+
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass
 # [howto/manual]).
