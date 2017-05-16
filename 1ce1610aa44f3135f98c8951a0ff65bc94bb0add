@@ -1,0 +1,8 @@
+Code-Review+2: Anusha Ramineni <anusha.ramineni@nectechnologies.in>
+Workflow+1: Anusha Ramineni <anusha.ramineni@nectechnologies.in>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Tue, 16 May 2017 10:24:15 +0000
+Reviewed-on: https://review.openstack.org/464856
+Project: openstack/python-congressclient
+Branch: refs/heads/stable/ocata
