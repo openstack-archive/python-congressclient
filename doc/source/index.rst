@@ -9,16 +9,21 @@ Welcome to python-congressclient's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
-   readme
-   installation
-   usage
-   contributing
-
-Indices and tables
-==================
+   user/readme
+   install/index
+   user/index
+   contributor/index
+   reference/index
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
+
+.. # Below are items we don't want to show doc consumers but need to be
+   # included to avoid sphinx warning/error.
+   # api/autoindex hidden because the information is already in modindex above
+.. toctree::
+   :hidden:
+
+   reference/api/autoindex

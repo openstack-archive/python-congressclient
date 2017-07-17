@@ -18,7 +18,9 @@ from keystoneauth1 import adapter
 class Client(object):
     """Client for the Congress v1 API.
 
-    Example::
+    Example
+    ::
+
         from keystoneauth1.identity import v2
         from keystoneauth1 import session
         from congressclient.v1 import client
