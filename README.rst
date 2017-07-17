@@ -14,7 +14,7 @@ python-congressclient
 Client for Congress
 
 * Free software: Apache license
-* Documentation: https://github.com/openstack/python-congressclient/blob/master/README.rst
+* Documentation: https://docs.openstack.org/python-congressclient/latest/
 * Source: http://git.openstack.org/cgit/openstack/python-congressclient
 * Bugs: http://bugs.launchpad.net/python-congressclient
 
@@ -22,7 +22,7 @@ Client for Congress
 Client for Standalone Congress
 ------------------------------
 Install the Congress CLI by cloning the repository and running the setup file.
-The master repository always contains the latest source code, so if you are 
+The master repository always contains the latest source code, so if you are
 installing and testing a specific branch of Congress, clone the matching branch
 of the python-congressclient.
 
@@ -37,7 +37,7 @@ To execute CLI commands to standalone Congress installed with noauth:
     $ git clone https://github.com/openstack/python-congressclient.git
     $ cd python-congressclient
     $ python setup.py install
-    
+
 * (Optional) Clone a branch; for example, if you are using the Ocata version of OpenStack and Congress::
 
     $ git clone -b stable/ocata https://github.com/openstack/python-congressclient.git
@@ -45,7 +45,7 @@ To execute CLI commands to standalone Congress installed with noauth:
     $ python setup.py install
 
 * Read the HTML documentation. Install python-sphinx and the oslosphinx extension if missing::
-  
+
   $ sudo pip install sphinx
   $ sudo pip install oslosphinx
 
@@ -53,7 +53,7 @@ To execute CLI commands to standalone Congress installed with noauth:
   $ make docs
 
   Open doc/html/index.html in a browser
-  
+
 * To execute CLI commands::
 
     $ cd python-congressclient
