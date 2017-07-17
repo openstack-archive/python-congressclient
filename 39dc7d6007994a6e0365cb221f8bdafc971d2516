@@ -1,0 +1,9 @@
+Code-Review+1: Andreas Jaeger <jaegerandi@gmail.com>
+Code-Review+2: Eric Kao <ekcs.openstack@gmail.com>
+Workflow+1: Anusha Ramineni <anusha.ramineni@nectechnologies.in>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Mon, 17 Jul 2017 05:11:06 +0000
+Reviewed-on: https://review.openstack.org/480538
+Project: openstack/python-congressclient
+Branch: refs/heads/master
