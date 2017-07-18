@@ -33,7 +33,6 @@ class Client(object):
         congress.create_policy_rule(..)
 
     """
-    policy = '/v1/policies'
     policy_path = '/v1/policies/%s'
     policy_rules = '/v1/policies/%s/rules'
     policy_rules_path = '/v1/policies/%s/rules/%s'
@@ -43,7 +42,6 @@ class Client(object):
     policy_rows_trace = '/v1/policies/%s/tables/%s/rows?trace=True'
     policies = '/v1/policies'
     policy_action = '/v1/policies/%s?%s'
-    library_policy = '/v1/librarypolicies'
     library_policy_path = '/v1/librarypolicies/%s'
     library_policies = '/v1/librarypolicies'
     datasources = '/v1/data-sources'
@@ -67,7 +65,7 @@ class Client(object):
 
     def create_policy(self, body):
         resp, body = self.httpclient.post(
-            self.policy, body=body)
+            self.policies, body=body)
         return body
 
     def delete_policy(self, policy):
@@ -82,7 +80,7 @@ class Client(object):
 
     def create_library_policy(self, body):
         resp, body = self.httpclient.post(
-            self.library_policy, body=body)
+            self.library_policies, body=body)
         return body
 
     def delete_library_policy(self, policy):
