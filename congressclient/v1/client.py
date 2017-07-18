@@ -43,6 +43,9 @@ class Client(object):
     policy_rows_trace = '/v1/policies/%s/tables/%s/rows?trace=True'
     policies = '/v1/policies'
     policy_action = '/v1/policies/%s?%s'
+    library_policy = '/v1/librarypolicies'
+    library_policy_path = '/v1/librarypolicies/%s'
+    library_policies = '/v1/librarypolicies'
     datasources = '/v1/data-sources'
     datasource_path = '/v1/data-sources/%s'
     datasource_tables = '/v1/data-sources/%s/tables'
@@ -77,6 +80,21 @@ class Client(object):
             self.policy_path % policy)
         return body
 
+    def create_library_policy(self, body):
+        resp, body = self.httpclient.post(
+            self.library_policy, body=body)
+        return body
+
+    def delete_library_policy(self, policy):
+        resp, body = self.httpclient.delete(
+            self.library_policy_path % policy)
+        return body
+
+    def show_library_policy(self, policy):
+        resp, body = self.httpclient.get(
+            self.library_policy_path % policy)
+        return body
+
     def create_policy_rule(self, policy_name, body=None):
         resp, body = self.httpclient.post(
             self.policy_rules % policy_name, body=body)
@@ -106,6 +124,10 @@ class Client(object):
 
     def list_policy(self):
         resp, body = self.httpclient.get(self.policies)
+        return body
+
+    def list_library_policy(self):
+        resp, body = self.httpclient.get(self.library_policies)
         return body
 
     def list_policy_tables(self, policy_name):
