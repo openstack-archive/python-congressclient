@@ -1,6 +1,6 @@
-========
+=====
 Usage
-========
+=====
 
 To use python-congressclient in a project::
 
