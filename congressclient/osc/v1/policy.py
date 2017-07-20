@@ -23,6 +23,7 @@ from keystoneauth1 import exceptions
 from oslo_log import log as logging
 from oslo_serialization import jsonutils
 import six
+import yaml
 
 from congressclient.common import utils
 
@@ -290,6 +291,44 @@ class CreatePolicy(show.ShowOne):
                 'abbreviation': parsed_args.abbreviation,
                 'kind': parsed_args.kind}
         data = client.create_policy(body)
+        return zip(*sorted(six.iteritems(data)))
+
+
+class CreatePolicyFromFile(show.ShowOne):
+    """Create a policy."""
+
+    log = logging.getLogger(__name__ + '.CreatePolicy')
+
+    def get_parser(self, prog_name):
+        parser = super(CreatePolicyFromFile, self).get_parser(prog_name)
+        parser.add_argument(
+            'policy_file_path',
+            metavar="<policy_file_path>",
+            help="Path to policy file")
+        return parser
+
+    def take_action(self, parsed_args):
+        self.log.debug('take_action(%s)' % parsed_args)
+        client = self.app.client_manager.congressclient
+        with open(parsed_args.policy_file_path, "r") as stream:
+            policies = yaml.load_all(stream)
+            try:
+                body = next(policies)
+            except StopIteration:
+                raise Exception('No policy found in file.')
+            try:
+                body = next(policies)
+                raise Exception(
+                    'More than one policy found in file. None imported.')
+            except StopIteration:
+                pass
+        data = client.create_policy(body)
+
+        def rule_dict_to_string(rules):
+            rule_str_list = [rule['rule'] for rule in rules]
+            return "\n".join(rule_str_list)
+
+        data['rules'] = rule_dict_to_string(data['rules'])
         return zip(*sorted(six.iteritems(data)))
 
 

@@ -10,6 +10,7 @@
 #   License for the specific language governing permissions and limitations
 #   under the License.
 #
+import os
 
 import mock
 
@@ -44,6 +45,43 @@ class TestCreatePolicy(common.TestCongressBase):
                      'owner'),
                     (policy_name, '', policy_id, 'nonrecursive',
                      policy_name, 'system')]
+        self.assertEqual(filtered, result)
+
+
+class TestCreatePolicyFromFile(common.TestCongressBase):
+
+    def test_create_policy(self):
+        policy_path = os.path.dirname(
+            os.path.abspath(__file__)) + '/test_policy_file.yaml'
+        policy_id = "e531f2b3-3d97-42c0-b3b5-b7b6ab532018"
+        response = {"description": "",
+                    "id": policy_id,
+                    "name": "test_policy",
+                    "kind": "nonrecursive",
+                    "owner": "system",
+                    "abbreviation": "abbr",
+                    "rules": [
+                        {'comment': 'test comment', 'name': 'test name',
+                         'rule': 'p(x) :-  q(x)'},
+                        {'comment': 'test comment2', 'name': 'test name2',
+                         'rule': 'p(x) :- q2(x)'}]}
+
+        arglist = [policy_path]
+        verifylist = [
+            ('policy_file_path', policy_path),
+        ]
+
+        mocker = mock.Mock(return_value=response)
+        self.app.client_manager.congressclient.create_policy = mocker
+        cmd = policy.CreatePolicyFromFile(self.app, self.namespace)
+        parsed_args = self.check_parser(cmd, arglist, verifylist)
+        result = list(cmd.take_action(parsed_args))
+        filtered = [('abbreviation', 'description', 'id', 'kind', 'name',
+                     'owner', 'rules'),
+                    ('abbr', '', policy_id, 'nonrecursive',
+                     'test_policy', 'system',
+                     'p(x) :-  q(x)\n'
+                     'p(x) :- q2(x)')]
         self.assertEqual(filtered, result)
 
 
