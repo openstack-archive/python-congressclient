@@ -110,7 +110,7 @@ class ShowDatasourceActions(lister.Lister):
         self.log.debug('take_action(%s)' % parsed_args)
         # as we know output it's long, limit column length here
         if parsed_args.max_width == 0:
-            parsed_args.max_width = 40
+            parsed_args.max_width = 80
 
         client = self.app.client_manager.congressclient
         datasource_id = parsed_args.datasource_name
