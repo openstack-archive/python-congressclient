@@ -60,7 +60,7 @@ class TestListDatasources(common.TestCongressBase):
                           u"driver": 'driver1',
                           u"config": {
                               u'username': u'admin',
-                              u'tenant_name': u'admin',
+                              u'project_name': u'admin',
                               u'poll_time': u'10',
                               u'password': u'<hidden>',
                               u'auth_url': u'http://127.0.0.1:5000/v2.0'
@@ -287,7 +287,7 @@ class TestCreateDatasource(common.TestCongressBase):
         name = 'arosen-neutronv2'
         response = {"description": '',
                     "config": {"username": "admin",
-                               "tenant_name": "admin",
+                               "project_name": "admin",
                                "password": "password",
                                "auth_url": "http://127.0.0.1:5000/v2.0"},
                     "enabled": True,
@@ -301,13 +301,13 @@ class TestCreateDatasource(common.TestCongressBase):
                    "--config", "username=admin",
                    "--config", "password=password",
                    "--config", "auth_url=http://1.1.1.1/foo",
-                   "--config", "tenant_name=admin"]
+                   "--config", "project_name=admin"]
         verifylist = [
             ('driver', driver),
             ('name', name),
             ('config', {'username': 'admin', 'password': 'password',
                         'auth_url': 'http://1.1.1.1/foo',
-                        'tenant_name': 'admin'}),
+                        'project_name': 'admin'}),
         ]
 
         mocker = mock.Mock(return_value=response)

@@ -25,7 +25,7 @@ class Client(object):
         from keystoneauth1 import session
         from congressclient.v1 import client
         auth = v2.Password(auth_url=AUTH_URL, username=USERNAME,
-                           password=PASSWORD, tenant_name=TENANT_NAME)
+                           password=PASSWORD, project_name=TENANT_NAME)
         sess = session.Session(auth=auth)
         congress = client.Client(session=sess,
                                  auth=None,

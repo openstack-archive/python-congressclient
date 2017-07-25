@@ -131,7 +131,7 @@ def get_resource_id_from_name(name, results):
         return name_match
     if double_name_match and not id_match:
         # NOTE(arosen): this should only occur is using congress
-        # as admin and multiple tenants use the same datsource name.
+        # as admin and multiple projects use the same datsource name.
         raise exceptions.Conflict(
             "Multiple resources have this name %s. Please specify id." % name)
     if id_match:
