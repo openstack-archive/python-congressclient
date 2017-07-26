@@ -32,6 +32,9 @@ class ListDrivers(lister.Lister):
         return parser
 
     def take_action(self, parsed_args):
+        # set default max-width
+        if parsed_args.max_width == 0:
+            parsed_args.max_width = 80
         client = self.app.client_manager.congressclient
         data = client.list_drivers()['results']
         columns = ['id', 'description']
@@ -57,6 +60,9 @@ class ShowDriverConfig(show.ShowOne):
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
+        # set default max-width
+        if parsed_args.max_width == 0:
+            parsed_args.max_width = 80
         client = self.app.client_manager.congressclient
         data = client.show_driver(
             parsed_args.driver)
@@ -86,6 +92,9 @@ class ShowDriverSchema(lister.Lister):
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
+        # set default max-width
+        if parsed_args.max_width == 0:
+            parsed_args.max_width = 80
         client = self.app.client_manager.congressclient
         data = client.show_driver(
             parsed_args.driver)

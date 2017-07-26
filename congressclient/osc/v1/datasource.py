@@ -35,6 +35,9 @@ class ListDatasources(lister.Lister):
         return parser
 
     def take_action(self, parsed_args):
+        # set default max-width
+        if parsed_args.max_width == 0:
+            parsed_args.max_width = 80
         client = self.app.client_manager.congressclient
         data = client.list_datasources()['results']
         # Type is always None, so disabling it for now.
@@ -61,6 +64,9 @@ class ListDatasourceTables(lister.Lister):
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
+        # set default max-width
+        if parsed_args.max_width == 0:
+            parsed_args.max_width = 80
         client = self.app.client_manager.congressclient
         name_or_id = parsed_args.datasource_name
         data = client.list_datasource_tables(name_or_id)['results']
@@ -87,6 +93,9 @@ class ShowDatasourceStatus(show.ShowOne):
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
+        # set default max-width
+        if parsed_args.max_width == 0:
+            parsed_args.max_width = 80
         client = self.app.client_manager.congressclient
         datasource_id = parsed_args.datasource_name
         data = client.list_datasource_status(datasource_id)
@@ -142,6 +151,9 @@ class ShowDatasourceSchema(lister.Lister):
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
+        # set default max-width
+        if parsed_args.max_width == 0:
+            parsed_args.max_width = 80
         client = self.app.client_manager.congressclient
         datasource_id = parsed_args.datasource_name
         data = client.show_datasource_schema(datasource_id)
@@ -175,6 +187,9 @@ class ShowDatasourceTableSchema(lister.Lister):
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
+        # set default max-width
+        if parsed_args.max_width == 0:
+            parsed_args.max_width = 80
         client = self.app.client_manager.congressclient
         datasource_id = parsed_args.datasource_name
         data = client.show_datasource_table_schema(
@@ -205,6 +220,9 @@ class ListDatasourceRows(lister.Lister):
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
+        # set default max-width
+        if parsed_args.max_width == 0:
+            parsed_args.max_width = 80
         client = self.app.client_manager.congressclient
         datasource_id = parsed_args.datasource_name
         results = client.list_datasource_rows(datasource_id,
@@ -238,6 +256,9 @@ class ShowDatasourceTable(show.ShowOne):
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
+        # set default max-width
+        if parsed_args.max_width == 0:
+            parsed_args.max_width = 80
         client = self.app.client_manager.congressclient
         data = client.show_datasource_table(parsed_args.datasource_name,
                                             parsed_args.table_id)
@@ -274,6 +295,9 @@ class CreateDatasource(show.ShowOne):
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
+        # set default max-width
+        if parsed_args.max_width == 0:
+            parsed_args.max_width = 80
         client = self.app.client_manager.congressclient
         body = {'name': parsed_args.name,
                 'driver': parsed_args.driver,

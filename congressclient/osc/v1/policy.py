@@ -80,6 +80,9 @@ class CreatePolicyRule(show.ShowOne):
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
+        # set default max-width
+        if parsed_args.max_width == 0:
+            parsed_args.max_width = 80
         client = self.app.client_manager.congressclient
         body = {'rule': parsed_args.rule}
         if parsed_args.rule_name:
@@ -224,6 +227,9 @@ class ListPolicyTables(lister.Lister):
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
+        # set default max-width
+        if parsed_args.max_width == 0:
+            parsed_args.max_width = 80
         client = self.app.client_manager.congressclient
         data = client.list_policy_tables(parsed_args.policy_name)['results']
         columns = ['id']
@@ -244,6 +250,9 @@ class ListPolicy(lister.Lister):
         return parser
 
     def take_action(self, parsed_args):
+        # set default max-width
+        if parsed_args.max_width == 0:
+            parsed_args.max_width = 80
         client = self.app.client_manager.congressclient
         data = client.list_policy()['results']
         columns = ['id', 'name', 'owner_id', 'kind', 'description']
@@ -285,6 +294,9 @@ class CreatePolicy(show.ShowOne):
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
+        # set default max-width
+        if parsed_args.max_width == 0:
+            parsed_args.max_width = 80
         client = self.app.client_manager.congressclient
         body = {'name': parsed_args.policy_name,
                 'description': parsed_args.description,
@@ -309,6 +321,9 @@ class CreatePolicyFromFile(show.ShowOne):
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
+        # set default max-width
+        if parsed_args.max_width == 0:
+            parsed_args.max_width = 80
         client = self.app.client_manager.congressclient
         with open(parsed_args.policy_file_path, "r") as stream:
             policies = yaml.load_all(stream)
@@ -376,6 +391,9 @@ class ListPolicyRows(lister.Lister):
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
+        # set default max-width
+        if parsed_args.max_width == 0:
+            parsed_args.max_width = 80
         client = self.app.client_manager.congressclient
         answer = client.list_policy_rows(parsed_args.policy_name,
                                          parsed_args.table,
@@ -412,6 +430,9 @@ class ShowPolicyRule(show.ShowOne):
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
+        # set default max-width
+        if parsed_args.max_width == 0:
+            parsed_args.max_width = 80
         client = self.app.client_manager.congressclient
         results = client.list_policy_rules(parsed_args.policy_name)
         rule_id = utils.get_resource_id_from_name(
@@ -440,6 +461,9 @@ class ShowPolicyTable(show.ShowOne):
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
+        # set default max-width
+        if parsed_args.max_width == 0:
+            parsed_args.max_width = 80
         client = self.app.client_manager.congressclient
         data = client.show_policy_table(parsed_args.policy_name,
                                         parsed_args.table_id)
@@ -462,6 +486,9 @@ class ShowPolicy(show.ShowOne):
 
     def take_action(self, parsed_args):
         self.log.debug('take_action(%s)' % parsed_args)
+        # set default max-width
+        if parsed_args.max_width == 0:
+            parsed_args.max_width = 80
         client = self.app.client_manager.congressclient
         results = client.list_policy()
         policy_id = utils.get_resource_id_from_name(

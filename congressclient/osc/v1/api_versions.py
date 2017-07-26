@@ -30,6 +30,9 @@ class ListAPIVersions(lister.Lister):
         return super(ListAPIVersions, self).get_parser(prog_name)
 
     def take_action(self, parsed_args):
+        # set default max-width
+        if parsed_args.max_width == 0:
+            parsed_args.max_width = 80
         client = self.app.client_manager.congressclient
         data = client.list_api_versions()['versions']
         # sort API by id
