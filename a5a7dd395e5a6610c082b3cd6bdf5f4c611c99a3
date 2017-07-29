@@ -1,0 +1,8 @@
+Code-Review+2: Eric Kao <ekcs.openstack@gmail.com>
+Workflow+1: Eric Kao <ekcs.openstack@gmail.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Sat, 29 Jul 2017 18:17:56 +0000
+Reviewed-on: https://review.openstack.org/488760
+Project: openstack/python-congressclient
+Branch: refs/heads/stable/pike
