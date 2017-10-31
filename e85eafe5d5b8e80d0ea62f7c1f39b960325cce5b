@@ -1,0 +1,9 @@
+Verified+1: Jenkins
+Code-Review+2: Anusha Ramineni <anusha.ramineni@nectechnologies.in>
+Workflow+1: Anusha Ramineni <anusha.ramineni@nectechnologies.in>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Tue, 31 Oct 2017 03:30:42 +0000
+Reviewed-on: https://review.openstack.org/509451
+Project: openstack/python-congressclient
+Branch: refs/heads/master
