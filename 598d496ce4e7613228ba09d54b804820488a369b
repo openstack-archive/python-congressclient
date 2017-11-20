@@ -1,0 +1,8 @@
+Code-Review+2: Eric Kao <ekcs.openstack@gmail.com>
+Workflow+1: Eric Kao <ekcs.openstack@gmail.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Mon, 20 Nov 2017 14:22:28 +0000
+Reviewed-on: https://review.openstack.org/518696
+Project: openstack/python-congressclient
+Branch: refs/heads/master
