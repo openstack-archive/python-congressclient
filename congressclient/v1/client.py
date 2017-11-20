@@ -65,24 +65,23 @@ class Client(object):
         kwargs.setdefault('user_agent', 'python-congressclient')
         self.httpclient = adapter.LegacyJsonAdapter(**kwargs)
 
-    def create_policy(self, body):
-        resp, body = self.httpclient.post(
-            self.policies, body=body)
+    def create_policy(self, body, library_policy_id=None):
+        url = self.policies
+        if library_policy_id:
+            url = url + "?library_policy=%s" % library_policy_id
+        resp, body = self.httpclient.post(url, body=body)
         return body
 
     def delete_policy(self, policy):
-        resp, body = self.httpclient.delete(
-            self.policy_path % policy)
+        resp, body = self.httpclient.delete(self.policy_path % policy)
         return body
 
     def show_policy(self, policy):
-        resp, body = self.httpclient.get(
-            self.policy_path % policy)
+        resp, body = self.httpclient.get(self.policy_path % policy)
         return body
 
     def create_library_policy(self, body):
-        resp, body = self.httpclient.post(
-            self.library_policies, body=body)
+        resp, body = self.httpclient.post(self.library_policies, body=body)
         return body
 
     def delete_library_policy(self, policy):
