@@ -89,9 +89,10 @@ class Client(object):
             self.library_policy_path % policy)
         return body
 
-    def show_library_policy(self, policy):
+    def show_library_policy(self, policy, include_rules=True):
+        query = "?include_rules=%s" % include_rules
         resp, body = self.httpclient.get(
-            self.library_policy_path % policy)
+            (self.library_policy_path % policy) + query)
         return body
 
     def create_policy_rule(self, policy_name, body=None):
@@ -125,8 +126,9 @@ class Client(object):
         resp, body = self.httpclient.get(self.policies)
         return body
 
-    def list_library_policy(self):
-        resp, body = self.httpclient.get(self.library_policies)
+    def list_library_policy(self, include_rules=True):
+        query = "?include_rules=%s" % include_rules
+        resp, body = self.httpclient.get(self.library_policies + query)
         return body
 
     def list_policy_tables(self, policy_name):
