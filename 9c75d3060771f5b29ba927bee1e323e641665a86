@@ -1,0 +1,8 @@
+Code-Review+2: Anusha Ramineni <anusha.ramineni@nectechnologies.in>
+Workflow+1: Eric Kao <ekcs.openstack@gmail.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Tue, 30 Jan 2018 20:05:06 +0000
+Reviewed-on: https://review.openstack.org/537678
+Project: openstack/python-congressclient
+Branch: refs/heads/stable/queens
