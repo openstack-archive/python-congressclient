@@ -1,0 +1,8 @@
+Code-Review+2: Anusha Ramineni <anusha.ramineni@india.nec.com>
+Workflow+1: Anusha Ramineni <anusha.ramineni@india.nec.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Mon, 12 Mar 2018 05:49:15 +0000
+Reviewed-on: https://review.openstack.org/551619
+Project: openstack/python-congressclient
+Branch: refs/heads/master
