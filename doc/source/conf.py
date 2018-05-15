@@ -21,15 +21,19 @@ sys.path.insert(0, os.path.abspath('../..'))
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
-    'sphinx.ext.autodoc',
-    #'sphinx.ext.intersphinx',
-    'openstackdocstheme'
+    'openstackdocstheme',
+    'sphinxcontrib.apidoc'
 ]
 
 # openstackdocstheme options
 repository_name = 'openstack/python-congressclient'
 bug_project = 'python-congressclient'
 bug_tag = ''
+
+# sphinxcontrib.apidoc options
+apidoc_module_dir = '../../congressclient'
+apidoc_output_dir = 'reference/api'
+apidoc_separate_modules = True
 
 # Must set this variable to include year, month, day, hours, and minutes.
 html_last_updated_fmt = '%Y-%m-%d %H:%M'
