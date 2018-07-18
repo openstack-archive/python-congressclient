@@ -22,8 +22,8 @@ Contents:
 
 .. # Below are items we don't want to show doc consumers but need to be
    # included to avoid sphinx warning/error.
-   # api/autoindex hidden because the information is already in modindex above
+   # api/modules hidden because the information is already in modindex above
 .. toctree::
    :hidden:
 
-   reference/api/autoindex
+   reference/api/modules

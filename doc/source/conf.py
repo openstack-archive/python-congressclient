@@ -33,6 +33,8 @@ bug_tag = ''
 # sphinxcontrib.apidoc options
 apidoc_module_dir = '../../congressclient'
 apidoc_output_dir = 'reference/api'
+apidoc_excluded_paths = ['tests/*']
+
 apidoc_separate_modules = True
 
 # Must set this variable to include year, month, day, hours, and minutes.
@@ -61,6 +63,11 @@ add_module_names = True
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
+
+# A list of glob-style patterns that should be excluded when looking for
+# source files. They are matched against the source file names relative to the
+# source directory, using slashes as directory separators on all platforms.
+exclude_patterns = ['reference/api/congressclient.tests.*']
 
 # -- Options for HTML output --------------------------------------------------
 
