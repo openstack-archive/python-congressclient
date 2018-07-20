@@ -1,0 +1,10 @@
+Code-Review+1: jacky06 <zhang.min@99cloud.net>
+Code-Review+2: Eric Kao <ekcs.openstack@gmail.com>
+Code-Review+1: Akhil jain <akhil.jain@india.nec.com>
+Workflow+1: Eric Kao <ekcs.openstack@gmail.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Fri, 20 Jul 2018 18:29:02 +0000
+Reviewed-on: https://review.openstack.org/580808
+Project: openstack/python-congressclient
+Branch: refs/heads/master
