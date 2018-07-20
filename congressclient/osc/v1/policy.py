@@ -287,9 +287,10 @@ class CreatePolicy(show.ShowOne):
         parser.add_argument(
             '--kind',
             metavar="<kind>",
-            choices=['nonrecursive', 'database', 'action', 'materialized'],
+            choices=['nonrecursive', 'database', 'action', 'materialized',
+                     'z3'],
             help="Kind of policy: "
-                 "{nonrecursive, database, action, materialized}")
+                 "{nonrecursive, database, action, materialized, z3}")
         return parser
 
     def take_action(self, parsed_args):
