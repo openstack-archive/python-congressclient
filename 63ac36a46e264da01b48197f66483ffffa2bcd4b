@@ -1,0 +1,11 @@
+Code-Review+2: Anusha Ramineni <anusha.ramineni@india.nec.com>
+Code-Review+1: 98k <18552437190@163.com>
+Code-Review+1: wu.chunyang <wu.chunyang@99cloud.net>
+Code-Review+2: Eric Kao <ekcs.openstack@gmail.com>
+Workflow+1: Eric Kao <ekcs.openstack@gmail.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Fri, 14 Dec 2018 01:38:04 +0000
+Reviewed-on: https://review.openstack.org/620826
+Project: openstack/python-congressclient
+Branch: refs/heads/master
