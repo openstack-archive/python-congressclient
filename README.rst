@@ -15,7 +15,7 @@ Client for Congress
 
 * Free software: Apache license
 * Documentation: https://docs.openstack.org/python-congressclient/latest/
-* Source: https://git.openstack.org/cgit/openstack/python-congressclient
+* Source: https://opendev.org/openstack/python-congressclient
 * Bugs: https://bugs.launchpad.net/python-congressclient
 
 
