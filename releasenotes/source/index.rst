@@ -21,6 +21,8 @@ Contents
 .. toctree::
    :maxdepth: 2
 
+   train
+
 
 Indices and tables
 ==================
