@@ -2,8 +2,15 @@
 Team and repository tags
 ========================
 
-.. image:: https://governance.openstack.org/tc/badges/python-congressclient.svg
-    :target: https://governance.openstack.org/tc/reference/tags/index.html
+.. only::html
+
+    .. image:: https://governance.openstack.org/tc/badges/python-congressclient.svg
+        :target: https://governance.openstack.org/tc/reference/tags/index.html
+
+.. only::latex
+
+  .. image:: python-congressclient.svg
+
 
 .. Change things from this point on
 
