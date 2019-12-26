@@ -1,6 +1,6 @@
-========================
-Team and repository tags
-========================
+===============================
+python-congressclient
+===============================
 
 .. only::html
 
@@ -13,10 +13,6 @@ Team and repository tags
 
 
 .. Change things from this point on
-
-===============================
-python-congressclient
-===============================
 
 Client for Congress
 
