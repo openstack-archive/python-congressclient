@@ -37,7 +37,6 @@ apidoc_excluded_paths = ['tests/*']
 
 apidoc_separate_modules = True
 
-# Must set this variable to include year, month, day, hours, and minutes.
 html_last_updated_fmt = '%Y-%m-%d %H:%M'
 
 # autodoc generation is a bit aggressive and a nuisance when doing heavy
